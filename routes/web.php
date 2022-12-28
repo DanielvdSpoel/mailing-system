@@ -13,6 +13,4 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return inertia('Welcome');
-});
+Route::redirect('/', '/admin');
