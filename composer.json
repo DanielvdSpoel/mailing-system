@@ -17,7 +17,8 @@
         "pxlrbt/filament-environment-indicator": "^1.0",
         "sagalbot/encryptable": "^1.0",
         "spatie/laravel-ray": "^1.29",
-        "tightenco/ziggy": "^1.4"
+        "tightenco/ziggy": "^1.4",
+        "webklex/laravel-imap": "^4.0"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",
