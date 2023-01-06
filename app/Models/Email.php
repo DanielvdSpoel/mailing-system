@@ -65,6 +65,12 @@ class Email extends Model
         return $this->addresses()->wherePivot('type', 'bcc');
     }
 
+    public function labels(): BelongsToMany
+    {
+        return $this->belongsToMany(Label::class);
+    }
+
+
     public static function createFromImap($connection, $imapId, Inbox $inbox): ?Email
     {
         //Create email object

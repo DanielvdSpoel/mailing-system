@@ -41,10 +41,6 @@ class Inbox extends Model
         'smtp_password',
     ];
 
-    /**
-     * @throws MaskNotFoundException
-     * @throws ConnectionFailedException
-     */
     public function getClientConnection()
     {
         return imap_open( '{' . $this->imap_host . ':' . $this->imap_port .'/imap/' . $this->imap_encryption . '}INBOX', $this->imap_username, $this->imap_password);

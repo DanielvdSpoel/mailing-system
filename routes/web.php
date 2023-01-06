@@ -30,6 +30,7 @@ Route::get('/inbox/{inbox}', function (App\Models\Inbox $inbox) {
             if (Email::where('inbox_id', $inbox->id)->where('message_id', $imapEmail)->exists()) {
                 continue;
             }
+            Email::createFromImap($connection, $imapEmail, $inbox);
         }
     } else {
         dd(imap_errors());
