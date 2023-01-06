@@ -14,11 +14,13 @@
         "laravel/framework": "^9.0",
         "laravel/sanctum": "^2.11",
         "laravel/tinker": "^2.5",
+        "php-imap/php-imap": "^2.0",
         "pxlrbt/filament-environment-indicator": "^1.0",
         "sagalbot/encryptable": "^1.0",
         "spatie/laravel-ray": "^1.29",
         "tightenco/ziggy": "^1.4",
-        "webklex/laravel-imap": "^4.0"
+        "webklex/laravel-imap": "^4.0",
+      "ext-imap": "*"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",

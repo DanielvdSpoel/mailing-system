@@ -112,6 +112,7 @@ class InboxResource extends Resource
                 //
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -131,6 +132,7 @@ class InboxResource extends Resource
         return [
             'index' => Pages\ListInboxes::route('/'),
             'create' => Pages\CreateInbox::route('/create'),
+            'view' => Pages\ViewInbox::route('/{record}'),
             'edit' => Pages\EditInbox::route('/{record}/edit'),
         ];
     }

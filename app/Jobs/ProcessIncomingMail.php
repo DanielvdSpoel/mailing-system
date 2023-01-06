@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Webklex\IMAP\Commands\ImapIdleCommand;
 
 class ProcessIncomingMail implements ShouldQueue, ShouldBeUnique
 {
@@ -23,6 +24,18 @@ class ProcessIncomingMail implements ShouldQueue, ShouldBeUnique
 
     public function handle()
     {
-        dd($this->inbox);
+        try {
+            $client = $this->inbox->getClientConnection();
+            $folders = $client->getFolders();
+            dd($folders);
+            /** @var \Webklex\PHPIMAP\Folder $folder */
+            foreach ($folders as $folder){
+                dd($folder->messages()->all());
+            }
+
+
+        } catch (\Exception|\Throwable $e) {
+            $this->fail($e);
+        }
     }
 }

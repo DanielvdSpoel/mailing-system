@@ -15,6 +15,7 @@ class EditInbox extends EditRecord
     protected function getActions(): array
     {
         return [
+            Actions\ViewAction::make(),
             Actions\DeleteAction::make(),
             Actions\Action::make('Test connection')->action('testConnection')
         ];
@@ -30,7 +31,8 @@ class EditInbox extends EditRecord
     }
 
     public function testConnection()
-    {;
+    {
+        //todo use actually inputted data
         $clientManager = new ClientManager();
         $client = $clientManager->make([
             'host' => $this->record->imap_host,
@@ -47,7 +49,6 @@ class EditInbox extends EditRecord
                 ->success()
                 ->send();
         } catch (\Exception $e) {
-            dd($e);
             Notification::make()
                 ->title('Connection failed')
                 ->danger()

@@ -2,15 +2,20 @@
 
 namespace App\Models;
 
+use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Sagalbot\Encryptable\Encryptable;
+use Webklex\PHPIMAP\Client;
+use Webklex\PHPIMAP\ClientManager;
+use Webklex\PHPIMAP\Exceptions\ConnectionFailedException;
+use Webklex\PHPIMAP\Exceptions\MaskNotFoundException;
 
 class Inbox extends Model
 {
     use HasFactory, Encryptable;
 
-    protected $encryptable = [
+    protected array $encryptable = [
         'imap_host',
         'imap_port',
         'imap_username',
@@ -35,4 +40,13 @@ class Inbox extends Model
         'smtp_username',
         'smtp_password',
     ];
+
+    /**
+     * @throws MaskNotFoundException
+     * @throws ConnectionFailedException
+     */
+    public function getClientConnection()
+    {
+        return imap_open( '{' . $this->imap_host . ':' . $this->imap_port .'/imap/' . $this->imap_encryption . '}INBOX', $this->imap_username, $this->imap_password);
+    }
 }
