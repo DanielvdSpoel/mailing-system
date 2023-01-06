@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Jobs\ProcessIncomingMail;
+use App\Models\Inbox;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -25,6 +27,11 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->call(function () {
+            Inbox::all()->each(function ($inbox) {
+                ProcessIncomingMail::dispatch($inbox);
+            });
+        })->everyFifteenMinutes();
     }
 
     /**

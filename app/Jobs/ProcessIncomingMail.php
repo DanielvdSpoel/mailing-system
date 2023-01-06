@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Models\Email;
 use App\Models\Inbox;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
@@ -24,18 +25,18 @@ class ProcessIncomingMail implements ShouldQueue, ShouldBeUnique
 
     public function handle()
     {
-        try {
-            $client = $this->inbox->getClientConnection();
-            $folders = $client->getFolders();
-            dd($folders);
-            /** @var \Webklex\PHPIMAP\Folder $folder */
-            foreach ($folders as $folder){
-                dd($folder->messages()->all());
+        $connection = $this->inbox->getClientConnection();
+        if ($connection) {
+
+            //collect all emails and loop over them
+            $emailData = imap_search($connection, '');
+
+            foreach ($emailData as $imapEmail) {
+                if (Email::where('inbox_id', $this->inbox->id)->where('message_id', $imapEmail)->exists()) {
+                    continue;
+                }
+                Email::createFromImap($connection, $imapEmail, $this->inbox);
             }
-
-
-        } catch (\Exception|\Throwable $e) {
-            $this->fail($e);
         }
     }
 }
