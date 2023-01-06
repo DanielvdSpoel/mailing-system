@@ -3,9 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\RelationManagers\EmailRelationManager;
-use App\Filament\Resources\LabelResource\Pages;
-use App\Filament\Resources\LabelResource\RelationManagers;
-use App\Models\Label;
+use App\Filament\Resources\EmailAddressResource\Pages;
+use App\Models\EmailAddress;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
@@ -14,17 +13,27 @@ use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class LabelResource extends Resource
+class EmailAddressResource extends Resource
 {
-    protected static ?string $model = Label::class;
+    protected static ?string $model = EmailAddress::class;
 
-    protected static ?string $navigationIcon = 'heroicon-o-tag';
+    protected static ?string $navigationIcon = 'heroicon-o-users';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                Forms\Components\TextInput::make('label')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('mailbox')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('domain')
+                    ->required()
+                    ->maxLength(255),
+                Forms\Components\TextInput::make('email')
+                    ->email()
                     ->required()
                     ->maxLength(255),
             ]);
@@ -34,15 +43,18 @@ class LabelResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('label')
                     ->sortable()
                     ->searchable(),
-
+                Tables\Columns\TextColumn::make('email')
+                    ->sortable()
+                    ->searchable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
@@ -55,16 +67,17 @@ class LabelResource extends Resource
     public static function getRelations(): array
     {
         return [
-            EmailRelationManager::class,
+            EmailRelationManager::class
         ];
     }
 
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListLabels::route('/'),
-            'create' => Pages\CreateLabel::route('/create'),
-            'edit' => Pages\EditLabel::route('/{record}/edit'),
+            'index' => Pages\ListEmailAddresses::route('/'),
+            'create' => Pages\CreateEmailAddress::route('/create'),
+            'view' => Pages\ViewEmailAddress::route('/{record}'),
+            'edit' => Pages\EditEmailAddress::route('/{record}/edit'),
         ];
     }
 

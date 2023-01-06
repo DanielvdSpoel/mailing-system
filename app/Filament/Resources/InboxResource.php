@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Filament\RelationManagers\EmailRelationManager;
 use App\Filament\Resources\InboxResource\Pages;
 use App\Filament\Resources\InboxResource\RelationManagers;
 use App\Models\Inbox;
@@ -123,7 +124,7 @@ class InboxResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            EmailRelationManager::class,
         ];
     }
 
