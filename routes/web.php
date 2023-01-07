@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\EmailController;
 use App\Models\Email;
 use App\Models\EmailAddress;
 use App\Supports\EmailSupport;
 use Carbon\Carbon;
+use Filament\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 use Webklex\PHPIMAP\Folder;
 
@@ -19,6 +21,11 @@ use Webklex\PHPIMAP\Folder;
 */
 
 Route::redirect('/', '/admin');
+
+Route::middleware(Authenticate::class)->group(function () {
+    Route::get('/emails/{email}/body', [EmailController::class, 'body'])->name('emails.body');
+});
+
 Route::get('/inbox/{inbox}', function (App\Models\Inbox $inbox) {
     $connection = $inbox->getClientConnection();
     if ($connection) {

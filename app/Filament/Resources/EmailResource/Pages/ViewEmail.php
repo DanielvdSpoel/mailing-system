@@ -15,4 +15,16 @@ class ViewEmail extends ViewRecord
         return [
         ];
     }
+
+    protected function getFooterWidgetsColumns(): int|array
+    {
+        return 1;
+    }
+
+    protected function getFooterWidgets(): array
+    {
+        return [
+            EmailResource\Widgets\EmailContent::class,
+        ];
+    }
 }

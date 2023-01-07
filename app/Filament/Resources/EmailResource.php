@@ -4,8 +4,10 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\EmailResource\Pages;
 use App\Filament\Resources\EmailResource\RelationManagers;
+use App\Filament\Resources\EmailResource\Widgets\EmailContent;
 use App\Models\Email;
 use Filament\Forms;
+use Filament\Forms\Components\ViewField;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -80,6 +82,7 @@ class EmailResource extends Resource
                 ->label('Inbox')
                 ->relationship('inbox', 'label')
                 ->required(),
+
         ];
     }
 
@@ -91,6 +94,13 @@ class EmailResource extends Resource
             Tables\Columns\TextColumn::make('inbox.label')->label('Inbox'),
             Tables\Columns\TextColumn::make('received_at')
                 ->dateTime(),
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            EmailContent::class,
         ];
     }
 }
