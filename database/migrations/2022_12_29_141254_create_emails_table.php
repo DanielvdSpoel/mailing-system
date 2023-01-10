@@ -27,6 +27,8 @@ return new class extends Migration
             $table->dateTime('archived_at')->nullable();
             $table->dateTime('deleted_at')->nullable();
             $table->dateTime('read_at')->nullable();
+            $table->boolean('needs_human_verification')->default(false);
+            $table->dateTime('auto_filtered_at')->nullable();
             $table->foreignIdFor(Inbox::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

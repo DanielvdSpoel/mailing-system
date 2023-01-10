@@ -19,6 +19,8 @@ return new class extends Migration
             $table->string('mailbox');
             $table->string('domain');
             $table->string('email');
+            $table->softDeletes();
+            $table->dateTime('verified_at')->nullable();
             $table->timestamps();
         });
     }

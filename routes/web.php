@@ -3,11 +3,14 @@
 use App\Http\Controllers\EmailController;
 use App\Models\Email;
 use App\Models\EmailAddress;
+use App\Supports\EmailRuleSupport\EmailRuleHandler;
+use App\Supports\EmailRuleSupport\Enumns\RuleOperation;
 use App\Supports\EmailSupport;
 use Carbon\Carbon;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 use Webklex\PHPIMAP\Folder;
+use function Filament\Support\get_model_label;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,6 +29,10 @@ Route::middleware(Authenticate::class)->group(function () {
     Route::get('/emails/{email}/body', [EmailController::class, 'body'])->name('emails.body');
 });
 
+Route::get('/test', function () {
+    dd(EmailRuleHandler::getActionBlocks());
+
+});
 Route::get('/inbox/{inbox}', function (App\Models\Inbox $inbox) {
     $connection = $inbox->getClientConnection();
     if ($connection) {

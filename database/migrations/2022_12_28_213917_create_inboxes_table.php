@@ -27,6 +27,8 @@ return new class extends Migration
             $table->string('smtp_encryption');
             $table->text('smtp_username');
             $table->text('smtp_password');
+            $table->dateTime('last_successful_connection_at')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

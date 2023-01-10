@@ -13,8 +13,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::table('email_addresses', function (Blueprint $table) {
-            $table->softDeletes();
+        Schema::create('email_rules', function (Blueprint $table) {
+            $table->id();
+            $table->string('label');
+            $table->json('conditions');
+            $table->json('actions');
+            $table->timestamps();
         });
     }
 
@@ -25,8 +29,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::table('email_addresses', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
+        Schema::dropIfExists('email_rules');
     }
 };
