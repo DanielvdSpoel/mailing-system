@@ -3,11 +3,13 @@
 namespace App\Listeners;
 
 use App\Events\EmailReceived;
+use App\Jobs\CollectCCAddressesFromEmail;
 use App\Jobs\FilterEmail;
+use App\Jobs\SaveEmailAttachments;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class DispatchFilterEmailJob
+class DispatchEmailMetaCollectingJobs
 {
     /**
      * Create the event listener.
@@ -28,6 +30,8 @@ class DispatchFilterEmailJob
     public function handle(EmailReceived $event)
     {
         //Todo put it in specialised queue
-        FilterEmail::dispatch($event->email);
+        CollectCCAddressesFromEmail::dispatch($event->email)->onQueue('email_meta');
+        FilterEmail::dispatch($event->email)->onQueue('email_meta');
+        SaveEmailAttachments::dispatch($event->email)->onQueue('email_meta');
     }
 }

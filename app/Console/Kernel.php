@@ -29,7 +29,7 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         $schedule->call(function () {
             Inbox::all()->each(function ($inbox) {
-                ProcessIncomingEmail::dispatch($inbox);
+                ProcessIncomingEmail::dispatch($inbox)->onQueue('email');
             });
         })->everyFifteenMinutes();
     }

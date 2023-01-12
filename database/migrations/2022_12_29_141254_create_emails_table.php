@@ -22,7 +22,7 @@ return new class extends Migration
             $table->longText('html_body')->nullable();
             $table->foreignId('reply_to_address_id')->nullable()->constrained('email_addresses')->nullOnDelete();
             $table->foreignId('sender_address_id')->nullable()->constrained('email_addresses')->nullOnDelete();
-            $table->integer('message_id')->nullable();
+            $table->integer('message_uid')->nullable();
             $table->dateTime('received_at');
             $table->dateTime('archived_at')->nullable();
             $table->dateTime('deleted_at')->nullable();

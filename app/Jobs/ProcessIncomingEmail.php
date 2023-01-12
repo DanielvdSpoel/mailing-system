@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Events\EmailReceived;
 use App\Models\Email;
 use App\Models\Inbox;
+use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -33,10 +34,10 @@ class ProcessIncomingEmail implements ShouldQueue, ShouldBeUnique
             $emailData = imap_search($connection, '');
 
             foreach ($emailData as $imapEmail) {
-                if (Email::where('inbox_id', $this->inbox->id)->where('message_id', $imapEmail)->exists()) {
+                if (Email::where('inbox_id', $this->inbox->id)->where('message_uid', imap_uid($connection, $imapEmail))->exists()) {
                     continue;
                 }
-                $email = Email::createFromImap($connection, $imapEmail, $this->inbox);
+                $email = Email::createFromImap($connection, imap_uid($connection, $imapEmail), $this->inbox);
                 EmailReceived::dispatch($email);
             }
         }

@@ -2,16 +2,11 @@
 
 use App\Http\Controllers\EmailController;
 use App\Jobs\FilterEmail;
+use App\Jobs\ProcessIncomingEmail;
+use App\Jobs\SaveEmailAttachments;
 use App\Models\Email;
-use App\Models\EmailAddress;
-use App\Supports\EmailRuleSupport\EmailRuleHandler;
-use App\Supports\EmailRuleSupport\Enumns\RuleOperation;
-use App\Supports\EmailSupport;
-use Carbon\Carbon;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
-use Webklex\PHPIMAP\Folder;
-use function Filament\Support\get_model_label;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,27 +26,12 @@ Route::middleware(Authenticate::class)->group(function () {
 });
 
 Route::get('/test', function () {
-    $email = Email::all()->first();
+    $email = Email::find(12);
     dump($email);
-    FilterEmail::dispatchSync($email);
+    SaveEmailAttachments::dispatchSync($email);
     dd("Finished");
 
 });
 Route::get('/inbox/{inbox}', function (App\Models\Inbox $inbox) {
-    $connection = $inbox->getClientConnection();
-    if ($connection) {
-
-        //collect all emails and loop over them
-        $emailData = imap_search($connection, '');
-
-        foreach ($emailData as $imapEmail) {
-            if (Email::where('inbox_id', $inbox->id)->where('message_id', $imapEmail)->exists()) {
-                continue;
-            }
-            Email::createFromImap($connection, $imapEmail, $inbox);
-        }
-    } else {
-        dd(imap_errors());
-    }
-
+    ProcessIncomingEmail::dispatchSync($inbox);
 });

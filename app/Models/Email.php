@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Sagalbot\Encryptable\Encryptable;
 use \Webklex\PHPIMAP\Message;
@@ -28,6 +29,7 @@ class Email extends Model
         'deleted_at',
         'read_at',
         'inbox_id',
+        'message_uid',
     ];
 
 
@@ -72,19 +74,23 @@ class Email extends Model
         return $this->belongsToMany(Label::class);
     }
 
+    public function attachments(): HasMany
+    {
+        return $this->hasMany(EmailAttachment::class);
+    }
 
-    public static function createFromImap($connection, $imapId, Inbox $inbox): ?Email
+    public static function createFromImap($connection, $imapUid, Inbox $inbox): ?Email
     {
         //Create email object
         $email = new Email();
-        $email->message_id = $imapId;
+        $email->message_uid = $imapUid;
 
         //collect necessary parts of the email
-        $structure = imap_fetchstructure($connection, $imapId);
-        $header = imap_rfc822_parse_headers(imap_fetchheader($connection, $imapId));
+        $structure = imap_fetchstructure($connection, $imapUid, FT_UID);
+        $header = imap_rfc822_parse_headers(imap_fetchheader($connection, $imapUid, FT_UID));
 
         //collect the body
-        EmailSupport::handlePart($structure, null, $connection, $imapId, $email);
+        EmailSupport::handlePart($structure, null, $connection, $imapUid, $email);
 
         //Collect all other things
         $email->subject = $header->subject;
@@ -113,6 +119,8 @@ class Email extends Model
             ]
         );
         $email->reply_to_address_id = $replyToEmailAddress->id;
+
+
         try {
             $email->save();
             return $email;
