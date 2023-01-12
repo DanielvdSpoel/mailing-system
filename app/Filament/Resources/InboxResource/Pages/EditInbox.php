@@ -51,6 +51,7 @@ class EditInbox extends EditRecord
         } catch (\Exception $e) {
             Notification::make()
                 ->title('Connection failed')
+                ->body($e->getMessage())
                 ->danger()
                 ->send();
         }

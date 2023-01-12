@@ -2,6 +2,7 @@
 
 namespace App\Jobs;
 
+use App\Events\EmailReceived;
 use App\Models\Email;
 use App\Models\Inbox;
 use Illuminate\Bus\Queueable;
@@ -12,7 +13,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Webklex\IMAP\Commands\ImapIdleCommand;
 
-class ProcessIncomingMail implements ShouldQueue, ShouldBeUnique
+class ProcessIncomingEmail implements ShouldQueue, ShouldBeUnique
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -35,7 +36,8 @@ class ProcessIncomingMail implements ShouldQueue, ShouldBeUnique
                 if (Email::where('inbox_id', $this->inbox->id)->where('message_id', $imapEmail)->exists()) {
                     continue;
                 }
-                Email::createFromImap($connection, $imapEmail, $this->inbox);
+                $email = Email::createFromImap($connection, $imapEmail, $this->inbox);
+                EmailReceived::dispatch($email);
             }
         }
     }

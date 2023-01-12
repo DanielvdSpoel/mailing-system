@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmailController;
+use App\Jobs\FilterEmail;
 use App\Models\Email;
 use App\Models\EmailAddress;
 use App\Supports\EmailRuleSupport\EmailRuleHandler;
@@ -30,7 +31,10 @@ Route::middleware(Authenticate::class)->group(function () {
 });
 
 Route::get('/test', function () {
-    dd(EmailRuleHandler::getActionBlocks());
+    $email = Email::all()->first();
+    dump($email);
+    FilterEmail::dispatchSync($email);
+    dd("Finished");
 
 });
 Route::get('/inbox/{inbox}', function (App\Models\Inbox $inbox) {

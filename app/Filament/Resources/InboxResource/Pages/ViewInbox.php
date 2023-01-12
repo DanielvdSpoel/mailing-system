@@ -3,7 +3,8 @@
 namespace App\Filament\Resources\InboxResource\Pages;
 
 use App\Filament\Resources\InboxResource;
-use App\Jobs\ProcessIncomingMail;
+use App\Jobs\ProcessIncomingEmail;
+use Filament\Notifications\Notification;
 use Filament\Pages\Actions;
 use Filament\Resources\Pages\ViewRecord;
 
@@ -22,6 +23,10 @@ class ViewInbox extends ViewRecord
 
     public function synchronize()
     {
-        ProcessIncomingMail::dispatchSync($this->record);
+        ProcessIncomingEmail::dispatchSync($this->record);
+        Notification::make()
+            ->title('Synchronization successful')
+            ->success()
+            ->send();
     }
 }

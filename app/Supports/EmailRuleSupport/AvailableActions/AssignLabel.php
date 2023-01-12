@@ -12,6 +12,8 @@ class AssignLabel implements AvailableActionsInterface
 
     static function executeAction(Email $email, array $settings)
     {
+        $label = Label::find($settings['label']);
+        dd($label);
         // TODO: Implement executeAction() method.
     }
 
