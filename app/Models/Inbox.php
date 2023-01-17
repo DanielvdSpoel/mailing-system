@@ -25,6 +25,7 @@ class Inbox extends Model
         'smtp_port',
         'smtp_username',
         'smtp_password',
+        'last_successful_connection_at'
     ];
 
     protected $fillable = [
