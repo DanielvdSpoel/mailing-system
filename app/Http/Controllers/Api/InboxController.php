@@ -13,7 +13,7 @@ class InboxController extends Controller
         return InboxResource::collection(Inbox::all());
     }
 
-    public function show(InboxResource $inbox)
+    public function show(Inbox $inbox)
     {
         return new InboxResource($inbox);
     }
