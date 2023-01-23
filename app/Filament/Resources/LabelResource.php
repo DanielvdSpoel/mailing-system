@@ -30,6 +30,8 @@ class LabelResource extends Resource
                     ->required()
                     ->maxLength(255),
                 Select::make('color')
+                    ->required()
+                    ->default('gray')
                     ->allowHtml()
                     ->searchable()
                     ->options([
