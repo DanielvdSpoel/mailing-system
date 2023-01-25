@@ -6,7 +6,9 @@ use App\Filament\RelationManagers\EmailRelationManager;
 use App\Filament\Resources\InboxResource\Pages;
 use App\Filament\Resources\InboxResource\RelationManagers;
 use App\Models\Inbox;
+use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Closure;
+use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
@@ -64,7 +66,31 @@ class InboxResource extends Resource
                             ->label('Use the same username and password for SMTP')
                             ->inline(false)
                             ->reactive(),
-
+                        TableRepeater::make('folder_to_flags_mapping')
+                            ->columnWidths([
+                                'deleted' => '10%',
+                                'seen' => '10%',
+                                'draft' => '10%',
+                                'send' => '10%',
+                                'spam' => '10%',
+                            ])
+                            ->schema([
+                                TextInput::make('folder')
+                                    ->disableLabel(),
+                                Checkbox::make('deleted')
+                                    ->disableLabel(),
+                                Checkbox::make('draft')
+                                    ->disableLabel(),
+                                Checkbox::make('send')
+                                    ->disableLabel(),
+                                Checkbox::make('spam')
+                                    ->disableLabel(),
+                            ])
+                            ->columnSpan('full')
+                        ->disableItemMovement()
+                        ->disableItemDeletion()
+                        ->disableItemCreation()
+                    ->hiddenOn('create')
                     ]),
                 Fieldset::make('SMTP settings')
                     ->schema([

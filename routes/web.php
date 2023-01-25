@@ -26,12 +26,14 @@ Route::middleware(Authenticate::class)->group(function () {
 });
 
 Route::get('/test', function () {
-    $email = Email::find(12);
-    dump($email);
-    SaveEmailAttachments::dispatchSync($email);
+    $email = Email::find(1);
+    $connection = $email->inbox->getClientConnection($email->inbox->getConnectionString());
+    dump(imap_fetch_overview($connection, $email->message_uid, FT_UID));
+//    SaveEmailAttachments::dispatchSync($email);
     dd("Finished");
 
 });
 Route::get('/inbox/{inbox}', function (App\Models\Inbox $inbox) {
+
     ProcessIncomingEmail::dispatchSync($inbox);
 });

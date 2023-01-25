@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Supports\EmailSupport;
+use App\Supports\ImapSocket;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -10,8 +11,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Log;
 use Sagalbot\Encryptable\Encryptable;
-use \Webklex\PHPIMAP\Message;
 
 class Email extends Model
 {
@@ -29,6 +30,8 @@ class Email extends Model
         'deleted_at',
         'read_at',
         'inbox_id',
+        'conversation_id',
+        'message_id',
         'message_uid',
     ];
 
@@ -79,7 +82,12 @@ class Email extends Model
         return $this->hasMany(EmailAttachment::class);
     }
 
-    public static function createFromImap($connection, $imapUid, Inbox $inbox): ?Email
+    public function conversation(): BelongsTo
+    {
+        return $this->belongsTo(Conversation::class);
+    }
+
+    public static function createFromImap($connection, $imapUid, Inbox $inbox, array $flags): ?Email
     {
         //Create email object
         $email = new Email();
@@ -88,12 +96,12 @@ class Email extends Model
         //collect necessary parts of the email
         $structure = imap_fetchstructure($connection, $imapUid, FT_UID);
         $header = imap_rfc822_parse_headers(imap_fetchheader($connection, $imapUid, FT_UID));
-
         //collect the body
         EmailSupport::handlePart($structure, null, $connection, $imapUid, $email);
 
         //Collect all other things
         $email->subject = $header->subject;
+        $email->message_id = $header->message_id;
 
         $email->received_at = Carbon::parse($header->date)->setTimezone(config('app.timezone'))->toDateTimeString();
         $email->inbox_id = $inbox->id;
@@ -120,16 +128,50 @@ class Email extends Model
         );
         $email->reply_to_address_id = $replyToEmailAddress->id;
 
+        //Handle flags
+        $overview = imap_fetch_overview($connection, $email->message_uid, FT_UID)[0];
+
+        dump($header);
+        dump($overview);
+
+        if ($overview->seen || $flags['seen']) {
+            $email->read_at = Carbon::now()->setTimezone(config('app.timezone'))->toDateTimeString();
+        }
+        if ($overview->deleted || $flags['deleted']) {
+            $email->deleted_at = Carbon::now()->setTimezone(config('app.timezone'))->toDateTimeString();
+        }
+        if ($overview->draft || $flags['draft']) {
+            $email->is_draft = true;
+        }
+
+        //Handle conversations
+        if (property_exists($header, 'in_reply_to')) {
+            $inReplyTo = Email::where('message_id', $header->in_reply_to)->first();
+            if ($inReplyTo) {
+                if ($inReplyTo->conversation_id) {
+                    $email->conversation_id = $inReplyTo->conversation_id;
+                } else {
+                    $conversation = Conversation::create();
+                    $inReplyTo->conversation_id = $conversation->id;
+                    $inReplyTo->save();
+                    $email->conversation_id = $conversation->id;
+                }
+            }
+        }
 
         try {
             $email->save();
             return $email;
         } catch (\Exception $e) {
+            dd($e);
+            //todo show errors in web
             Log::critical("We could not save the email with id " . $email->message_id . " from inbox " . $email->inbox_id);
             Log::critical("Email was send by " . $email->senderAddress->email);
             Log::critical("Email subject was " . $email->subject);
             return null;
         }
     }
+
+
 
 }

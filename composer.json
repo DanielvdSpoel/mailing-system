@@ -6,6 +6,8 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "ext-imap": "*",
+        "awcodes/filament-table-repeater": "^1.0",
         "doctrine/dbal": "^3.5",
         "filament/filament": "^2.0",
         "fruitcake/laravel-cors": "^2.0",
@@ -19,8 +21,7 @@
         "sagalbot/encryptable": "^1.0",
         "spatie/laravel-ray": "^1.29",
         "tightenco/ziggy": "^1.4",
-        "webklex/laravel-imap": "^4.0",
-      "ext-imap": "*"
+        "webklex/laravel-imap": "^4.0"
     },
     "require-dev": {
         "spatie/laravel-ignition": "^1.0",

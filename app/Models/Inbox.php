@@ -35,6 +35,7 @@ class Inbox extends Model
         'imap_encryption',
         'imap_username',
         'imap_password',
+        'folder_to_flags_mapping',
         'same_credentials',
         'smtp_host',
         'smtp_port',
@@ -43,9 +44,42 @@ class Inbox extends Model
         'smtp_password',
     ];
 
-    public function getClientConnection()
+    /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'folder_to_flags_mapping' => 'array',
+    ];
+
+    public function getClientConnection(string $connectionString): \IMAP\Connection|bool
     {
-        return imap_open( '{' . $this->imap_host . ':' . $this->imap_port .'/imap/' . $this->imap_encryption . '}INBOX', $this->imap_username, $this->imap_password);
+        return imap_open($connectionString, $this->imap_username, $this->imap_password);
+    }
+
+    public function getConnectionString(): string
+    {
+        return '{' . $this->imap_host . ':' . $this->imap_port .'/' . $this->imap_encryption . '}';
+    }
+
+    public function getFolders(): array
+    {
+        $connectionString = $this->getConnectionString();
+        $connection = $this->getClientConnection($connectionString);
+        $folders = imap_list($connection, $connectionString, '*');
+        imap_close($connection);
+        return $folders;
+    }
+
+    public function getFolderFlagMapping($folder): array
+    {
+        foreach ($this->folder_to_flags_mapping as $mapping) {
+            if ($mapping['folder'] == $folder) {
+                return $mapping;
+            }
+        }
+        return [];
     }
 
     public function emails(): HasMany

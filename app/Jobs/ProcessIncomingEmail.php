@@ -27,19 +27,28 @@ class ProcessIncomingEmail implements ShouldQueue, ShouldBeUnique
 
     public function handle()
     {
-        $connection = $this->inbox->getClientConnection();
-        if ($connection) {
+        $connection = $this->inbox->getClientConnection($this->inbox->getConnectionString());
+        $folder_list = imap_list($connection, $this->inbox->getConnectionString() , "*");
+        foreach ($folder_list as $folder) {
+            $connection = $this->inbox->getClientConnection($folder);
+            $flags = $this->inbox->getFolderFlagMapping($folder);
 
-            //collect all emails and loop over them
             $emailData = imap_search($connection, '');
-
-            foreach ($emailData as $imapEmail) {
-                if (Email::where('inbox_id', $this->inbox->id)->where('message_uid', imap_uid($connection, $imapEmail))->exists()) {
-                    continue;
-                }
-                $email = Email::createFromImap($connection, imap_uid($connection, $imapEmail), $this->inbox);
-                EmailReceived::dispatch($email);
+            if ($emailData) {
+                $this->handleFolder($connection, $emailData, $flags);
             }
+        }
+
+    }
+
+    public function handleFolder($connection, $emailData, $flags)
+    {
+        foreach ($emailData as $imapEmail) {
+            if (Email::where('inbox_id', $this->inbox->id)->where('message_uid', imap_uid($connection, $imapEmail))->exists()) {
+                continue;
+            }
+            $email = Email::createFromImap($connection, imap_uid($connection, $imapEmail), $this->inbox, $flags);
+            EmailReceived::dispatch($email);
         }
     }
 }

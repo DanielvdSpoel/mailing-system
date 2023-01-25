@@ -7,6 +7,7 @@ module.exports = {
         "./resources/**/*.js",
         "./resources/**/*.vue",
         './vendor/filament/**/*.blade.php',
+        "./vendor/awcodes/filament-table-repeater/resources/views/**/*.blade.php",
     ],
     darkMode: 'class',
     theme: {

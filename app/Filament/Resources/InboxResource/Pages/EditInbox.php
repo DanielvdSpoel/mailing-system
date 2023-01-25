@@ -21,6 +21,23 @@ class EditInbox extends EditRecord
         ];
     }
 
+    protected function afterFill(): void
+    {
+        foreach ($this->record->getFolders() as $folder) {
+            $found = false;
+            foreach ($this->data['folder_to_flags_mapping'] as $mapping) {
+                if ($folder == $mapping['folder']) {
+                    $found = true;
+                }
+            }
+            if (!$found) {
+                $this->data['folder_to_flags_mapping'][] = [
+                    'folder' => $folder,
+                ];
+            }
+        }
+    }
+
     protected function mutateFormDataBeforeSave(array $data): array
     {
         if ($data['same_credentials']) {

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Conversation;
 use App\Models\EmailAdress;
 use App\Models\Inbox;
 use Illuminate\Database\Migrations\Migration;
@@ -23,12 +24,15 @@ return new class extends Migration
             $table->foreignId('reply_to_address_id')->nullable()->constrained('email_addresses')->nullOnDelete();
             $table->foreignId('sender_address_id')->nullable()->constrained('email_addresses')->nullOnDelete();
             $table->integer('message_uid')->nullable();
+            $table->string('message_id')->nullable();
             $table->dateTime('received_at');
             $table->dateTime('archived_at')->nullable();
             $table->dateTime('deleted_at')->nullable();
             $table->dateTime('read_at')->nullable();
+            $table->boolean('is_draft')->default(false);
             $table->boolean('needs_human_verification')->default(false);
             $table->dateTime('auto_filtered_at')->nullable();
+            $table->foreignIdFor(Conversation::class)->nullable()->constrained()->cascadeOnDelete();
             $table->foreignIdFor(Inbox::class)->constrained()->cascadeOnDelete();
             $table->timestamps();
         });

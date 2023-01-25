@@ -28,6 +28,7 @@ return new class extends Migration
             $table->text('smtp_username');
             $table->text('smtp_password');
             $table->dateTime('last_successful_connection_at')->nullable();
+            $table->json('folder_to_flags_mapping')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });
