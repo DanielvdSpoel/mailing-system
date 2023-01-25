@@ -16,7 +16,7 @@ return new class extends Migration
     {
         Schema::create('inboxes', function (Blueprint $table) {
             $table->id();
-            $table->string('label');
+            $table->string('name');
             $table->text('imap_host');
             $table->text('imap_port');
             $table->string('imap_encryption');

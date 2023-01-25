@@ -32,7 +32,7 @@ class InboxResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('label')
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
                 Select::make('template_id')

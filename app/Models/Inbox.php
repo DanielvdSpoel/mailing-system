@@ -31,7 +31,7 @@ class Inbox extends Model
     ];
 
     protected $fillable = [
-        'label',
+        'name',
         'imap_host',
         'imap_port',
         'imap_encryption',
