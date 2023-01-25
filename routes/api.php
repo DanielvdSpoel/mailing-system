@@ -21,12 +21,12 @@ Route::post('/auth/login', [AuthenticationController::class, 'login']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
-    Route::prefix('/inbox')->group(function () {
+    Route::prefix('/inboxes')->group(function () {
         Route::get('/', [InboxController::class, 'index']);
 //        Route::get('/paginated', [InboxController::class, 'store']);
 //        Route::get('/{id}', [InboxController::class, 'show']);
     });
-    Route::prefix('/label')->group(function () {
+    Route::prefix('/labels')->group(function () {
         Route::get('/', [LabelController::class, 'index']);
 //        Route::get('/paginated', [InboxController::class, 'store']);
 //        Route::get('/{id}', [InboxController::class, 'show']);
