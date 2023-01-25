@@ -102,7 +102,7 @@ class InboxTemplateResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\InboxesRelationManager::class
         ];
     }
 
