@@ -5,14 +5,12 @@ namespace App\Jobs;
 use App\Events\EmailReceived;
 use App\Models\Email;
 use App\Models\Inbox;
-use Carbon\Carbon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Webklex\IMAP\Commands\ImapIdleCommand;
 
 class ProcessIncomingEmail implements ShouldQueue, ShouldBeUnique
 {

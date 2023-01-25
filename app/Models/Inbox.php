@@ -5,7 +5,9 @@ namespace App\Models;
 use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Sagalbot\Encryptable\Encryptable;
 use Webklex\PHPIMAP\Client;
 use Webklex\PHPIMAP\ClientManager;
@@ -14,7 +16,7 @@ use Webklex\PHPIMAP\Exceptions\MaskNotFoundException;
 
 class Inbox extends Model
 {
-    use HasFactory, Encryptable;
+    use HasFactory, Encryptable, SoftDeletes;
 
     protected array $encryptable = [
         'imap_host',
@@ -42,6 +44,7 @@ class Inbox extends Model
         'smtp_encryption',
         'smtp_username',
         'smtp_password',
+        'template_id',
     ];
 
     /**
@@ -85,5 +88,10 @@ class Inbox extends Model
     public function emails(): HasMany
     {
         return $this->hasMany(Email::class);
+    }
+
+    public function template(): BelongsTo
+    {
+        return $this->belongsTo(InboxTemplate::class, 'template_id');
     }
 }

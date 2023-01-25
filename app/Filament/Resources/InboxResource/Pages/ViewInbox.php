@@ -16,7 +16,9 @@ class ViewInbox extends ViewRecord
     {
         return [
             Actions\EditAction::make(),
-            Actions\Action::make('Synchronize inbox')->action('synchronize')
+            Actions\Action::make('Synchronize inbox')->action('synchronize'),
+            Actions\ForceDeleteAction::make(),
+            Actions\RestoreAction::make(),
 
         ];
     }

@@ -6,6 +6,7 @@ use App\Filament\RelationManagers\EmailRelationManager;
 use App\Filament\Resources\InboxResource\Pages;
 use App\Filament\Resources\InboxResource\RelationManagers;
 use App\Models\Inbox;
+use App\Models\InboxTemplate;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
 use Closure;
 use Filament\Forms\Components\Checkbox;
@@ -17,6 +18,9 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\SoftDeletingScope;
+use SebastianBergmann\Template\Template;
 
 class InboxResource extends Resource
 {
@@ -31,13 +35,30 @@ class InboxResource extends Resource
                 TextInput::make('label')
                     ->required()
                     ->maxLength(255),
+                Select::make('template_id')
+                    ->nullable()
+                    ->relationship('template', 'name')
+                    ->afterStateUpdated(function (Closure $set, $state) {
+                        $template = InboxTemplate::find($state);
+                        if ($template) {
+                            $set('imap_host', $template->imap_host);
+                            $set('imap_port', $template->imap_port);
+                            $set('imap_encryption', $template->imap_encryption);
+                            $set('smtp_host', $template->smtp_host);
+                            $set('smtp_port', $template->smtp_port);
+                            $set('smtp_encryption', $template->smtp_encryption);
+                        }
+                    })
+                    ->reactive(),
                 Fieldset::make('IMAP settings')
                     ->schema([
                         TextInput::make('imap_host')
                             ->maxLength(255)
+                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
                             ->label('Host')
                             ->required(),
                         TextInput::make('imap_port')
+                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
                             ->maxLength(255)
                             ->label('Port')
                             ->minValue(1)
@@ -55,6 +76,7 @@ class InboxResource extends Resource
                             ->password()
                             ->required(),
                         Select::make('imap_encryption')
+                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
                             ->label('Encryption')
                             ->required()
                             ->options([
@@ -87,18 +109,20 @@ class InboxResource extends Resource
                                     ->disableLabel(),
                             ])
                             ->columnSpan('full')
-                        ->disableItemMovement()
-                        ->disableItemDeletion()
-                        ->disableItemCreation()
-                    ->hiddenOn('create')
+                            ->disableItemMovement()
+                            ->disableItemDeletion()
+                            ->disableItemCreation()
+                            ->hiddenOn('create')
                     ]),
                 Fieldset::make('SMTP settings')
                     ->schema([
                         TextInput::make('smtp_host')
+                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
                             ->maxLength(255)
                             ->label('Host')
                             ->required(),
                         TextInput::make('smtp_port')
+                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
                             ->maxLength(255)
                             ->label('Port')
                             ->minValue(1)
@@ -118,6 +142,7 @@ class InboxResource extends Resource
                             ->password()
                             ->required(),
                         Select::make('smtp_encryption')
+                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
                             ->label('Encryption')
                             ->required()
                             ->options([
@@ -136,7 +161,7 @@ class InboxResource extends Resource
                 Tables\Columns\TextColumn::make('label')->searchable()->sortable(),
             ])
             ->filters([
-                //
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
@@ -144,6 +169,8 @@ class InboxResource extends Resource
             ])
             ->bulkActions([
                 Tables\Actions\DeleteBulkAction::make(),
+                Tables\Actions\ForceDeleteBulkAction::make(),
+                Tables\Actions\RestoreBulkAction::make(),
             ]);
     }
 
@@ -162,5 +189,13 @@ class InboxResource extends Resource
             'view' => Pages\ViewInbox::route('/{record}'),
             'edit' => Pages\EditInbox::route('/{record}/edit'),
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()
+            ->withoutGlobalScopes([
+                SoftDeletingScope::class,
+            ]);
     }
 }
