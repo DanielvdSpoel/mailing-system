@@ -32,7 +32,8 @@ class EmailRelationManager extends RelationManager
             ->headerActions([
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ViewAction::make()
+                    ->url(fn ($record) => EmailResource::getUrl('view', ['record' => $record])),
                 Tables\Actions\DeleteAction::make(),
                 Tables\Actions\ForceDeleteAction::make(),
                 Tables\Actions\RestoreAction::make(),

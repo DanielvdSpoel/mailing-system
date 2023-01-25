@@ -2,11 +2,13 @@
 
 namespace App\Filament\Resources\InboxTemplateResource\RelationManagers;
 
+use App\Filament\Resources\InboxResource;
 use Filament\Forms;
 use Filament\Resources\Form;
 use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Actions\ViewAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -40,7 +42,8 @@ class InboxesRelationManager extends RelationManager
             ->headerActions([
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                ViewAction::make()
+                    ->url(fn ($record) => InboxResource::getUrl('edit', ['record' => $record]))
             ])
             ->bulkActions([
             ]);

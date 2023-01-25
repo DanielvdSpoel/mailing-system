@@ -80,7 +80,7 @@ class EmailResource extends Resource
                 ->relationship('senderAddress', 'email'),
             Forms\Components\Select::make('inbox_id')
                 ->label('Inbox')
-                ->relationship('inbox', 'label')
+                ->relationship('inbox', 'name')
                 ->required(),
 
         ];

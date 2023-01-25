@@ -158,7 +158,7 @@ class InboxResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('label')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
