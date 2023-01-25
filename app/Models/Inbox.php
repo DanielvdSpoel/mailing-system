@@ -6,6 +6,7 @@ use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Sagalbot\Encryptable\Encryptable;
@@ -93,5 +94,10 @@ class Inbox extends Model
     public function template(): BelongsTo
     {
         return $this->belongsTo(InboxTemplate::class, 'template_id');
+    }
+
+    public function senderAddresses(): BelongsToMany
+    {
+        return $this->belongsToMany(EmailAddress::class);
     }
 }

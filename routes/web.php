@@ -26,11 +26,11 @@ Route::middleware(Authenticate::class)->group(function () {
 });
 
 Route::get('/test', function () {
-    $email = Email::find(1);
-    $connection = $email->inbox->getClientConnection($email->inbox->getConnectionString());
-    dump(imap_fetch_overview($connection, $email->message_uid, FT_UID));
-//    SaveEmailAttachments::dispatchSync($email);
-    dd("Finished");
+//    $email = Email::find(1);
+//    $connection = $email->inbox->getClientConnection($email->inbox->getConnectionString());
+//    dump(imap_fetch_overview($connection, $email->message_uid, FT_UID));
+////    SaveEmailAttachments::dispatchSync($email);
+//    dd("Finished");
 
 });
 Route::get('/inbox/{inbox}', function (App\Models\Inbox $inbox) {

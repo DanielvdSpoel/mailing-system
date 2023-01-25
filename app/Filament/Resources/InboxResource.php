@@ -50,6 +50,24 @@ class InboxResource extends Resource
                         }
                     })
                     ->reactive(),
+                Select::make('sender_addresses')
+                    ->multiple()
+                    ->relationship('senderAddresses', 'email')
+                    ->createOptionForm([
+                        TextInput::make('label')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('mailbox')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('domain')
+                            ->required()
+                            ->maxLength(255),
+                        TextInput::make('email')
+                            ->email()
+                            ->required()
+                            ->maxLength(255),
+                    ]),
                 Fieldset::make('IMAP settings')
                     ->schema([
                         TextInput::make('imap_host')

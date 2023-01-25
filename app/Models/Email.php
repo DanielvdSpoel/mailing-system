@@ -2,8 +2,12 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\ExcludeArchivedScope;
+use App\Models\Scopes\ExcludeDraftsScope;
+use App\Models\Scopes\ExcludeEmailsSendByUsScope;
 use App\Supports\EmailSupport;
 use App\Supports\ImapSocket;
+use Attribute;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -170,6 +174,15 @@ class Email extends Model
             Log::critical("Email subject was " . $email->subject);
             return null;
         }
+    }
+
+    protected static function booted()
+    {
+        static::addGlobalScope(new ExcludeDraftsScope());
+        static::addGlobalScope(new ExcludeArchivedScope());
+        static::addGlobalScope(new ExcludeEmailsSendByUsScope());
+
+
     }
 
 
