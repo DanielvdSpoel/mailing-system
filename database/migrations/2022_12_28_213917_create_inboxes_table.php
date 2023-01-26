@@ -17,14 +17,14 @@ return new class extends Migration
         Schema::create('inboxes', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->text('imap_host');
-            $table->text('imap_port');
+            $table->string('imap_host');
+            $table->integer('imap_port');
             $table->string('imap_encryption');
             $table->text('imap_username');
             $table->text('imap_password');
             $table->boolean('same_credentials')->default(false);
-            $table->text('smtp_host');
-            $table->text('smtp_port');
+            $table->string('smtp_host');
+            $table->integer('smtp_port');
             $table->string('smtp_encryption');
             $table->text('smtp_username');
             $table->text('smtp_password');

@@ -12,6 +12,7 @@ use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
+use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
@@ -33,6 +34,8 @@ class EmailResource extends Resource
             ->columns(self::getTableSchema())
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                Filter::make('has_no_body')
+                    ->query(fn (Builder $query): Builder => $query->whereNull('text_body')->whereNull('html_body')),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),

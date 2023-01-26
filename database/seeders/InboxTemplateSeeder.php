@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\InboxTemplate;
 use Illuminate\Database\Seeder;
 
 class InboxTemplateSeeder extends Seeder
@@ -12,8 +12,16 @@ class InboxTemplateSeeder extends Seeder
      *
      * @return void
      */
-    public function run()
+    public function run(): void
     {
-        //
+        InboxTemplate::firstOrCreate([
+            'name' => 'gmail',
+            'imap_host' => 'imap.gmail.com',
+            'imap_port' => 993,
+            'imap_encryption' => 'ssl',
+            'smtp_host' => 'smtp.gmail.com',
+            'smtp_port' => 587,
+            'smtp_encryption' => 'tls',
+        ]);
     }
 }

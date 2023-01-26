@@ -5,12 +5,15 @@ namespace App\Jobs;
 use App\Events\EmailReceived;
 use App\Models\Email;
 use App\Models\Inbox;
+use App\Models\User;
+use Filament\Notifications\Notification;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Filament\Notifications\Actions\Action;
 
 class ProcessIncomingEmail implements ShouldQueue, ShouldBeUnique
 {
@@ -25,6 +28,19 @@ class ProcessIncomingEmail implements ShouldQueue, ShouldBeUnique
 
     public function handle()
     {
+        if ($this->inbox->folder_to_flags_mapping === null) {
+            Notification::make()
+                ->title('Folder to flag mapping not set for inbox ' . $this->inbox->name)
+                ->danger()
+                ->actions([
+                    Action::make('set_mappings')
+                        ->button()
+                        ->url(route('filament.resources.inboxes.view', $this->inbox), shouldOpenInNewTab: true)
+                ])
+                ->sendToDatabase(User::all());
+            return;
+        }
+
         $connection = $this->inbox->getClientConnection($this->inbox->getConnectionString());
         $folder_list = imap_list($connection, $this->inbox->getConnectionString() , "*");
         foreach ($folder_list as $folder) {

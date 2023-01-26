@@ -29,7 +29,6 @@ class DispatchEmailMetaCollectingJobs
      */
     public function handle(EmailReceived $event)
     {
-        //Todo put it in specialised queue
         CollectCCAddressesFromEmail::dispatch($event->email)->onQueue('email_meta');
         FilterEmail::dispatch($event->email)->onQueue('email_meta');
         SaveEmailAttachments::dispatch($event->email)->onQueue('email_meta');

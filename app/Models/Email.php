@@ -6,8 +6,6 @@ use App\Models\Scopes\ExcludeArchivedScope;
 use App\Models\Scopes\ExcludeDraftsScope;
 use App\Models\Scopes\ExcludeEmailsSendByUsScope;
 use App\Supports\EmailSupport;
-use App\Supports\ImapSocket;
-use Attribute;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -33,6 +31,8 @@ class Email extends Model
         'archived_at',
         'deleted_at',
         'read_at',
+        'is_draft',
+        'email_send_by_us',
         'inbox_id',
         'conversation_id',
         'message_id',
@@ -135,9 +135,6 @@ class Email extends Model
         //Handle flags
         $overview = imap_fetch_overview($connection, $email->message_uid, FT_UID)[0];
 
-        dump($header);
-        dump($overview);
-
         if ($overview->seen || $flags['seen']) {
             $email->read_at = Carbon::now()->setTimezone(config('app.timezone'))->toDateTimeString();
         }
@@ -147,6 +144,13 @@ class Email extends Model
         if ($overview->draft || $flags['draft']) {
             $email->is_draft = true;
         }
+
+        //$inbox->senderAddresses()->pluck('email')->contains($email->senderAddress->email ||
+        //check if email was send by us
+        if ($flags['send']) {
+            $email->email_send_by_us = true;
+        }
+
 
         //Handle conversations
         if (property_exists($header, 'in_reply_to')) {
@@ -163,16 +167,16 @@ class Email extends Model
             }
         }
 
+
         try {
             $email->save();
             return $email;
         } catch (\Exception $e) {
-            dd($e);
-            //todo show errors in web
-            Log::critical("We could not save the email with id " . $email->message_id . " from inbox " . $email->inbox_id);
-            Log::critical("Email was send by " . $email->senderAddress->email);
-            Log::critical("Email subject was " . $email->subject);
-            return null;
+            Log::error($e->getMessage());
+            $email->html_body = null;
+            $email->text_body = null;
+            $email->save();
+            return $email;
         }
     }
 

@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             LabelSeeder::class,
+            InboxTemplateSeeder::class,
         ]);
     }
 }

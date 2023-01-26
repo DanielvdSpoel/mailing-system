@@ -24,10 +24,13 @@ Route::middleware(Authenticate::class)->group(function () {
 });
 
 Route::get('/test', function () {
-    Filament\Notifications\Notification::make()
-        ->title('Saved successfully')
-        ->sendToDatabase(User::first());
-    dd('done');
+    \App\Models\Inbox::each(function ($inbox) {
+        dump($inbox->imap_password);
+    });
+//    Filament\Notifications\Notification::make()
+//        ->title('Saved successfully')
+//        ->sendToDatabase(User::findOrFail(1));
+//    dd('done');
 
 //    $email = Email::find(1);
 //    $connection = $email->inbox->getClientConnection($email->inbox->getConnectionString());

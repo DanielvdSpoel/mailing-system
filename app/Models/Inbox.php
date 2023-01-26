@@ -20,15 +20,10 @@ class Inbox extends Model
     use HasFactory, Encryptable, SoftDeletes;
 
     protected array $encryptable = [
-        'imap_host',
-        'imap_port',
         'imap_username',
         'imap_password',
-        'smtp_host',
-        'smtp_port',
         'smtp_username',
         'smtp_password',
-        'last_successful_connection_at'
     ];
 
     protected $fillable = [
