@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Events\EmailReceived;
 use App\Listeners\DispatchEmailMetaCollectingJobs;
+use App\Listeners\SendEmailReceivedNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -21,7 +22,8 @@ class EventServiceProvider extends ServiceProvider
             SendEmailVerificationNotification::class,
         ],
         EmailReceived::class => [
-            DispatchEmailMetaCollectingJobs::class
+            DispatchEmailMetaCollectingJobs::class,
+            SendEmailReceivedNotification::class,
         ]
     ];
 

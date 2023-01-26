@@ -16,7 +16,7 @@ class InboxResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'label' => $this->label,
+            'name' => $this->name,
             'last_successful_connection_at' => $this->last_successful_connection_at,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

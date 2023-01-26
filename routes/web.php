@@ -1,10 +1,8 @@
 <?php
 
 use App\Http\Controllers\EmailController;
-use App\Jobs\FilterEmail;
 use App\Jobs\ProcessIncomingEmail;
-use App\Jobs\SaveEmailAttachments;
-use App\Models\Email;
+use App\Models\User;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
@@ -26,6 +24,11 @@ Route::middleware(Authenticate::class)->group(function () {
 });
 
 Route::get('/test', function () {
+    Filament\Notifications\Notification::make()
+        ->title('Saved successfully')
+        ->sendToDatabase(User::first());
+    dd('done');
+
 //    $email = Email::find(1);
 //    $connection = $email->inbox->getClientConnection($email->inbox->getConnectionString());
 //    dump(imap_fetch_overview($connection, $email->message_uid, FT_UID));
