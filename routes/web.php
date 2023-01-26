@@ -23,10 +23,15 @@ Route::middleware(Authenticate::class)->group(function () {
     Route::get('/emails/{email}/body', [EmailController::class, 'body'])->name('emails.body');
 });
 
-Route::get('/test', function () {
-    \App\Models\Inbox::each(function ($inbox) {
-        dump($inbox->imap_password);
+if (config('app.debug')) {
+    Route::get('/inbox/{inbox}', function (App\Models\Inbox $inbox) {
+        ProcessIncomingEmail::dispatchSync($inbox);
     });
+
+    Route::get('/test', function () {
+        \App\Models\Inbox::each(function ($inbox) {
+            dump($inbox->imap_password);
+        });
 //    Filament\Notifications\Notification::make()
 //        ->title('Saved successfully')
 //        ->sendToDatabase(User::findOrFail(1));
@@ -37,9 +42,6 @@ Route::get('/test', function () {
 //    dump(imap_fetch_overview($connection, $email->message_uid, FT_UID));
 ////    SaveEmailAttachments::dispatchSync($email);
 //    dd("Finished");
+    });
 
-});
-Route::get('/inbox/{inbox}', function (App\Models\Inbox $inbox) {
-
-    ProcessIncomingEmail::dispatchSync($inbox);
-});
+}
