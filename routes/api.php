@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthenticationController;
+use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\InboxController;
 use App\Http\Controllers\Api\LabelController;
 use Illuminate\Http\Request;
@@ -30,6 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('/', [LabelController::class, 'index']);
 //        Route::get('/paginated', [InboxController::class, 'store']);
 //        Route::get('/{id}', [InboxController::class, 'show']);
+    });
+    Route::prefix('/emails')->group(function () {
+        Route::get('/', [EmailController::class, 'index']);
     });
     Route::get('/user', function (Request $request) {
         return $request->user();

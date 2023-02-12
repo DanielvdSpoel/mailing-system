@@ -18,6 +18,7 @@ class InboxResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'last_successful_connection_at' => $this->last_successful_connection_at,
+            'senderAddresses' => $this->senderAddresses()->pluck('email'),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];
