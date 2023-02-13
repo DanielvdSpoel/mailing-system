@@ -2,6 +2,8 @@
 
 namespace App\Supports\EmailRuleSupport\Enumns;
 
+use Illuminate\Support\Str;
+
 enum RuleOperation
 {
     case Contains;
@@ -15,7 +17,7 @@ enum RuleOperation
         $a = strtolower($a);
         $b = strtolower($b);
         return match ($this->name) {
-            'Contains' => str_contains($a, $b),
+            'Contains' => Str::contains($a, $b),
             'Equals' => $a == $b,
             'Starts_with' => str_starts_with($a, $b),
             'Ends_with' => str_ends_with($a, $b),
