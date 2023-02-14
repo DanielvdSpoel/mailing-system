@@ -16,14 +16,13 @@ class RefreshController extends Controller
             ProcessIncomingEmail::dispatchSync(Inbox::find($request->inbox_id));
 
         } else {
-            \Log::debug('Refreshing all inboxes');
             foreach (Inbox::all() as $inbox) {
                 ProcessIncomingEmail::dispatchSync($inbox);
             }
         }
 
         return response()->json([
-            'message' => 'Refreshed',
+            'message' => 'Emails have been refreshed',
         ]);
     }
 }
