@@ -23,8 +23,11 @@ Route::post('/auth/login', [AuthenticationController::class, 'login']);
 
 
 Route::middleware('auth:sanctum')->group(function () {
+
     Route::apiResource('inboxes', InboxController::class)->only(['index', 'show']);
     Route::apiResource('labels', LabelController::class)->only(['index', 'show']);
+
+    Route::patch('/emails/batch-update', [EmailController::class, 'batchUpdate'])->name('emails.batch-update');
     Route::apiResource('emails', EmailController::class)->only(['index']);
 
     Route::post('/refresh', RefreshController::class)->name('refresh');
