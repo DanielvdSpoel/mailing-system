@@ -18,7 +18,12 @@ class EmailController extends Controller
             $email->where('inbox_id', $request->inbox_id);
         }
 
-        return EmailResource::collection($email->paginate());
+        $email->orderBy('received_at', 'desc');
+
+        $per_page = $request->get('per_page', 25);
+        $email = $email->paginate($per_page);
+
+        return EmailResource::collection($email);
 
 
     }
