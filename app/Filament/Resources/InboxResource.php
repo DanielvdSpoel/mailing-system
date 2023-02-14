@@ -116,14 +116,19 @@ class InboxResource extends Resource
                             ])
                             ->schema([
                                 TextInput::make('folder')
+                                    ->disabled()
                                     ->disableLabel(),
                                 Checkbox::make('deleted')
+                                    ->default(false)
                                     ->disableLabel(),
                                 Checkbox::make('draft')
+                                    ->default(false)
                                     ->disableLabel(),
                                 Checkbox::make('send')
+                                    ->default(false)
                                     ->disableLabel(),
                                 Checkbox::make('spam')
+                                    ->default(false)
                                     ->disableLabel(),
                             ])
                             ->columnSpan('full')
