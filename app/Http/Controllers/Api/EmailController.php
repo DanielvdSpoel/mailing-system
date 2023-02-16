@@ -29,6 +29,11 @@ class EmailController extends Controller
 
     }
 
+    public function show(Email $email)
+    {
+        return new EmailResource($email);
+    }
+
     public function update(UpdateEmailRequest $request, Email $email)
     {
         $data = $request->validated();
@@ -66,4 +71,5 @@ class EmailController extends Controller
             'message' => 'The selected emails have been updated',
         ]);
     }
+
 }
