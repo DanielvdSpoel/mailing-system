@@ -180,14 +180,6 @@ class Email extends Model
         }
     }
 
-    protected static function booted()
-    {
-        static::addGlobalScope(new ExcludeDraftsScope());
-        static::addGlobalScope(new ExcludeArchivedScope());
-        static::addGlobalScope(new ExcludeEmailsSendByUsScope());
-
-
-    }
 
 
 

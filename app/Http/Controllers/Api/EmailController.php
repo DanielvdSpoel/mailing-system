@@ -14,10 +14,27 @@ class EmailController extends Controller
 {
     public function index(Request $request)
     {
-        $email = Email::query();
+        $email = Email::query()
+            ->with(['inbox', 'labels', 'senderAddress', 'conversation', 'inbox.senderAddresses']);
 
         if ($request->inbox_id) {
             $email->where('inbox_id', $request->inbox_id);
+        }
+
+        if (!$request->get('included_archived', false)) {
+            $email->whereNull('archived_at');
+        }
+
+        if (!$request->get('included_deleted', false)) {
+            $email->whereNull('deleted_at');
+        }
+
+        if (!$request->get('included_drafts', false)) {
+            $email->where('is_draft', false);
+        }
+
+        if (!$request->get('included_emails_send_by_us', false)) {
+            $email->where('email_send_by_us', false);
         }
 
         $email->orderBy('received_at', 'desc');
@@ -50,7 +67,7 @@ class EmailController extends Controller
         $ids = $data['ids'];
         unset($data['ids']);
 
-        Email::whereIn('id', $ids)->withoutGlobalScopes()->each(function ($email) use ($data) {
+        Email::whereIn('id', $ids)->each(function ($email) use ($data) {
             $this->updateEmail($email, $data);
         });
 
@@ -59,9 +76,12 @@ class EmailController extends Controller
         ]);
     }
 
-    private function updateEmail(Email $email, $data)
+    private function updateEmail(Email $email, $data): void
     {
         foreach (['is_archived', 'is_deleted', 'is_read'] as $key) {
+            if (!isset($data[$key])) {
+                continue;
+            }
             $data[explode('_', $key)[1] . '_at'] = $data[$key] ?? false ? Carbon::now() : null;
             unset($data[$key]);
         }
@@ -71,7 +91,7 @@ class EmailController extends Controller
             unset($data['labels']);
         }
 
-        $email->withoutGlobalScopes()->update($data);
+        $email->update($data);
 
     }
 
