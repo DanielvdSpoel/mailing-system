@@ -32,22 +32,18 @@ class EmailController extends Controller
     public function batchUpdate(BatchUpdateRequest $request)
     {
         $data = $request->validated();
-        foreach (['is_archived', 'is_deleted', 'is_read'] as $var) {
-            if (isset($data[$var]) && $data[$var]) {
-                unset($data[$var]);
-                $data[explode('_', $var)[1] . '_at'] = Carbon::now();
-            } else if (isset($data[$var])){
-                unset($data[$var]);
-                $data[explode('_', $var)[1] . '_at'] = null;
-            }
+        foreach (['is_archived', 'is_deleted', 'is_read'] as $key) {
+            $data[explode('_', $key)[1] . '_at'] = $data[$key] ?? false ? Carbon::now() : null;
+            unset($data[$key]);
         }
         $ids = $data['ids'];
         unset($data['ids']);
 
+
         Email::whereIn('id', $ids)->withoutGlobalScopes()->update($data);
 
         return response()->json([
-            'message' => 'Emails have been updated',
+            'message' => 'The selected emails have been updated',
         ]);
     }
 }

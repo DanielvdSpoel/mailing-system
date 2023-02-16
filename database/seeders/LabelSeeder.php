@@ -19,5 +19,6 @@ class LabelSeeder extends Seeder
             'name' => 'spam',
             'color' => 'red',
         ]);
+        Label::factory(10)->create();
     }
 }
