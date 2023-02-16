@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\BatchUpdateRequest;
-use App\Http\Resources\EmailCollection;
+use App\Http\Requests\Api\BatchUpdateRequest;
+use App\Http\Requests\Api\UpdateEmailRequest;
 use App\Http\Resources\EmailResource;
 use App\Models\Email;
 use Illuminate\Http\Request;
@@ -27,6 +27,26 @@ class EmailController extends Controller
 
         return EmailResource::collection($email);
 
+    }
+
+    public function update(UpdateEmailRequest $request, Email $email)
+    {
+        $data = $request->validated();
+        foreach (['is_archived', 'is_deleted', 'is_read'] as $key) {
+            $data[explode('_', $key)[1] . '_at'] = $data[$key] ?? false ? Carbon::now() : null;
+            unset($data[$key]);
+        }
+        if (isset($data['labels'])) {
+            $email->labels()->sync($data['labels']);
+            unset($data['labels']);
+        }
+
+
+        $email->withoutGlobalScopes()->update($data);
+
+        return response()->json([
+            'message' => 'The email has been updated',
+        ]);
     }
 
     public function batchUpdate(BatchUpdateRequest $request)

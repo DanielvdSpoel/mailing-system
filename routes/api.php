@@ -28,7 +28,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('labels', LabelController::class)->only(['index', 'show']);
 
     Route::patch('/emails/batch-update', [EmailController::class, 'batchUpdate'])->name('emails.batch-update');
-    Route::apiResource('emails', EmailController::class)->only(['index']);
+    Route::apiResource('emails', EmailController::class)->only(['index', 'update']);
 
     Route::post('/refresh', RefreshController::class)->name('refresh');
 
