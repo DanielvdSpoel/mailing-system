@@ -20,10 +20,11 @@ class EmailResource extends JsonResource
             'text_body' => $this->text_body,
             'html_body' => $this->html_body,
             'sender' => $this->senderAddress,
-            'inbox' => $this->inbox,
-            'recieved_at' => $this->received_at,
+            'inbox' => new InboxResource($this->inbox),
+            'labels' => LabelResource::collection($this->labels),
+            'received_at' => $this->received_at,
             'conversation' => $this->conversation,
-            'is_read' => $this->read_at ? true : false,
+            'is_read' => (bool)$this->read_at,
 
         ];
     }

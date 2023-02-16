@@ -36,18 +36,7 @@ class EmailController extends Controller
 
     public function update(UpdateEmailRequest $request, Email $email)
     {
-        $data = $request->validated();
-        foreach (['is_archived', 'is_deleted', 'is_read'] as $key) {
-            $data[explode('_', $key)[1] . '_at'] = $data[$key] ?? false ? Carbon::now() : null;
-            unset($data[$key]);
-        }
-        if (isset($data['labels'])) {
-            $email->labels()->sync($data['labels']);
-            unset($data['labels']);
-        }
-
-
-        $email->withoutGlobalScopes()->update($data);
+        $this->updateEmail($email, $request->validated());
 
         return response()->json([
             'message' => 'The email has been updated',
@@ -57,19 +46,33 @@ class EmailController extends Controller
     public function batchUpdate(BatchUpdateRequest $request)
     {
         $data = $request->validated();
-        foreach (['is_archived', 'is_deleted', 'is_read'] as $key) {
-            $data[explode('_', $key)[1] . '_at'] = $data[$key] ?? false ? Carbon::now() : null;
-            unset($data[$key]);
-        }
+
         $ids = $data['ids'];
         unset($data['ids']);
 
-
-        Email::whereIn('id', $ids)->withoutGlobalScopes()->update($data);
+        Email::whereIn('id', $ids)->withoutGlobalScopes()->each(function ($email) use ($data) {
+            $this->updateEmail($email, $data);
+        });
 
         return response()->json([
             'message' => 'The selected emails have been updated',
         ]);
+    }
+
+    private function updateEmail(Email $email, $data)
+    {
+        foreach (['is_archived', 'is_deleted', 'is_read'] as $key) {
+            $data[explode('_', $key)[1] . '_at'] = $data[$key] ?? false ? Carbon::now() : null;
+            unset($data[$key]);
+        }
+
+        if (isset($data['labels'])) {
+            $email->labels()->sync($data['labels']);
+            unset($data['labels']);
+        }
+
+        $email->withoutGlobalScopes()->update($data);
+
     }
 
 }

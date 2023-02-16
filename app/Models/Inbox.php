@@ -26,6 +26,19 @@ class Inbox extends Model
         'smtp_password',
     ];
 
+    /**
+     * The attributes that should be hidden for serialization.
+     *
+     * @var array
+     */
+    protected $hidden = [
+        'imap_username',
+        'imap_password',
+        'smtp_username',
+        'smtp_password',
+    ];
+
+
     protected $fillable = [
         'name',
         'imap_host',
