@@ -21,6 +21,23 @@ class EmailController extends Controller
             $email->where('inbox_id', $request->inbox_id);
         }
 
+        if ($request->label_id) {
+            $email->whereHas('labels', function ($query) use ($request) {
+                $query->where('label_id', $request->label_id);
+            });
+        }
+
+        if ($request->search) {
+            $email->where(function ($query) use ($request) {
+                $query->where('subject', 'like', '%' . $request->search . '%')
+                    ->orWhere('text_body', 'like', '%' . $request->search . '%')
+                    ->orWhere('html_body', 'like', '%' . $request->search . '%')
+                    ->orWhereHas('senderAddress', function ($query) use ($request) {
+                        $query->where('email', 'like', '%' . $request->search . '%');
+                    });
+            });
+        }
+
         if (!$request->get('included_archived', false)) {
             $email->whereNull('archived_at');
         }
@@ -40,7 +57,16 @@ class EmailController extends Controller
         $email->orderBy('received_at', 'desc');
 
         $per_page = $request->get('per_page', 25);
-        $email = $email->paginate($per_page);
+
+        if ($request->get('limit')) {
+            $email->limit($request->get('limit'));
+        }
+
+        if ($request->get('no_pagination')) {
+            $email = $email->get();
+        } else {
+            $email = $email->paginate($per_page);
+        }
 
         return EmailResource::collection($email);
 

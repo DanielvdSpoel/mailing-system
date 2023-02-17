@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthenticationController;
+use App\Http\Controllers\Api\EmailAddressController;
 use App\Http\Controllers\Api\EmailController;
 use App\Http\Controllers\Api\InboxController;
 use App\Http\Controllers\Api\LabelController;
@@ -26,6 +27,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::apiResource('inboxes', InboxController::class)->only(['index', 'show']);
     Route::apiResource('labels', LabelController::class)->only(['index', 'show']);
+    Route::apiResource('email-addresses', EmailAddressController::class)->only(['index', 'show']);
 
     Route::patch('/emails/batch-update', [EmailController::class, 'batchUpdate'])->name('emails.batch-update');
     Route::apiResource('emails', EmailController::class)->only(['index', 'update', 'show']);
