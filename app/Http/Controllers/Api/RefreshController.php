@@ -21,8 +21,6 @@ class RefreshController extends Controller
             }
         }
 
-        return response()->json([
-            'message' => 'Emails have been refreshed',
-        ]);
+        return response()->noContent();
     }
 }

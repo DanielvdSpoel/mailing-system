@@ -55,9 +55,7 @@ class EmailController extends Controller
     {
         $this->updateEmail($email, $request->validated());
 
-        return response()->json([
-            'message' => 'The email has been updated',
-        ]);
+        return response()->noContent();
     }
 
     public function batchUpdate(BatchUpdateRequest $request)
@@ -71,9 +69,7 @@ class EmailController extends Controller
             $this->updateEmail($email, $data);
         });
 
-        return response()->json([
-            'message' => 'The selected emails have been updated',
-        ]);
+        return response()->noContent();
     }
 
     private function updateEmail(Email $email, $data): void
