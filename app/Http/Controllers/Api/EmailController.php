@@ -27,6 +27,10 @@ class EmailController extends Controller
             });
         }
 
+        if ($request->sender_id) {
+            $email->where('sender_address_id', $request->sender_id);
+        }
+
         if ($request->search) {
             $email->where(function ($query) use ($request) {
                 $query->where('subject', 'like', '%' . $request->search . '%')
