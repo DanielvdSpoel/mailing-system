@@ -17,14 +17,7 @@ class AssignLabel implements AvailableActionsInterface
         // TODO: Implement executeAction() method.
     }
 
-    static function getSettingsSchema(): array
-    {
-        return [
-            Select::make('setting')
-                ->options(Label::all()->pluck('name', 'id'))
-                ->searchable()
-        ];
-    }
+
 
     static function getBlock(): Block
     {
@@ -35,5 +28,12 @@ class AssignLabel implements AvailableActionsInterface
                     ->options(Label::all()->pluck('name', 'id'))
                     ->searchable()
             ]);
+    }
+
+    static function getFakeData(): array
+    {
+        return [
+            'label' => Label::factory()->create()->id
+        ];
     }
 }

@@ -4,13 +4,9 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\EmailRuleResource\Pages;
 use App\Filament\Resources\EmailRuleResource\RelationManagers;
-use App\Models\Email;
 use App\Models\EmailRule;
-use App\Models\Label;
 use App\Supports\EmailRuleSupport\EmailRuleHandler;
-use App\Supports\EmailRuleSupport\Enumns\RuleOperation;
 use Closure;
-use Filament\Forms;
 use Filament\Forms\Components\Builder;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Grid;

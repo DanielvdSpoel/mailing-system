@@ -19,4 +19,9 @@ class TrashEmail implements AvailableActionsInterface
             ->icon('heroicon-o-trash')
             ->schema([]);
     }
+
+    static function getFakeData(): array
+    {
+        return [];
+    }
 }
