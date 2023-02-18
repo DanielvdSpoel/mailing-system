@@ -58,17 +58,8 @@ class EmailResource extends Resource
     {
         return [
             'index' => Pages\ListEmails::route('/'),
-            'create' => Pages\CreateEmail::route('/create'),
             'view' => Pages\ViewEmail::route('/{record}'),
         ];
-    }
-
-    public static function getEloquentQuery(): Builder
-    {
-        return parent::getEloquentQuery()
-            ->withoutGlobalScopes([
-                SoftDeletingScope::class,
-            ]);
     }
 
     public static function getFormSchema(): array
@@ -94,7 +85,7 @@ class EmailResource extends Resource
         return [
             Tables\Columns\TextColumn::make('subject'),
             Tables\Columns\TextColumn::make('senderAddress.email')->label('From'),
-            Tables\Columns\TextColumn::make('inbox.label')->label('Inbox'),
+            Tables\Columns\TextColumn::make('inbox.name')->label('Inbox'),
             Tables\Columns\TextColumn::make('received_at')
                 ->dateTime(),
         ];

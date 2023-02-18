@@ -12,13 +12,11 @@ class InboxTemplateFactory extends Factory
         return [
             'name' => $this->faker->name(),
             'imap_host' => $this->faker->domainName(),
-            'imap_port' => $this->faker->word(),
+            'imap_port' => $this->faker->numberBetween(1, 100),
             'imap_encryption' => $this->faker->word(),
             'smtp_host' => $this->faker->domainName(),
-            'smtp_port' => $this->faker->word(),
+            'smtp_port' => $this->faker->numberBetween(1, 100),
             'smtp_encryption' => $this->faker->word(),
-            'created_at' => Carbon::now(),
-            'updated_at' => Carbon::now(),
         ];
     }
 }

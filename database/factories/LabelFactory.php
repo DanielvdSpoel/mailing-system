@@ -18,6 +18,7 @@ class LabelFactory extends Factory
     {
         return [
             'name' => $this->faker->word(),
+            'color' => $this->faker->randomElement(['red', 'green', 'blue', 'yellow', 'purple', 'pink', 'orange', 'gray']),
         ];
     }
 }

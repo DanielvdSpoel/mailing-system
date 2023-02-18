@@ -77,11 +77,15 @@ class Inbox extends Model
 
     public function getFolders(): array
     {
-        $connectionString = $this->getConnectionString();
-        $connection = $this->getClientConnection($connectionString);
-        $folders = imap_list($connection, $connectionString, '*');
-        imap_close($connection);
-        return $folders;
+        try {
+            $connectionString = $this->getConnectionString();
+            $connection = $this->getClientConnection($connectionString);
+            $folders = imap_list($connection, $connectionString, '*');
+            imap_close($connection);
+            return $folders;
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 
     public function getFolderFlagMapping($folder): array
