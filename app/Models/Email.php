@@ -2,6 +2,10 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\ExcludeArchivedEmailsScope;
+use App\Models\Scopes\ExcludeDraftEmailsScope;
+use App\Models\Scopes\ExcludeEmailsSendByUsScope;
+use App\Models\Scopes\ExcludeSnoozedEmailsScope;
 use App\Supports\EmailSupport;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -175,5 +179,14 @@ class Email extends Model
 
             return $email;
         }
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new ExcludeDraftEmailsScope());
+        static::addGlobalScope(new ExcludeArchivedEmailsScope());
+        static::addGlobalScope(new ExcludeEmailsSendByUsScope());
+        static::addGlobalScope(new ExcludeSnoozedEmailsScope());
+
     }
 }

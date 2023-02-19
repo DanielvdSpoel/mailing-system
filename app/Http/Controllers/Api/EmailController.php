@@ -42,20 +42,24 @@ class EmailController extends Controller
             });
         }
 
-        if (! $request->get('included_archived', false)) {
-            $email->whereNull('archived_at');
+        if ($request->get('included_archived', false)) {
+            $email->includeArchived();
         }
 
-        if (! $request->get('included_deleted', false)) {
-            $email->whereNull('deleted_at');
+        if ($request->get('included_deleted', false)) {
+            $email->withTrashed();
         }
 
-        if (! $request->get('included_drafts', false)) {
-            $email->where('is_draft', false);
+        if ($request->get('included_drafts', false)) {
+            $email->includeDrafts();
         }
 
-        if (! $request->get('included_emails_send_by_us', false)) {
-            $email->where('email_send_by_us', false);
+        if ($request->get('included_snoozed', false)) {
+            $email->includeSnoozed();
+        }
+
+        if ($request->get('included_emails_send_by_us', false)) {
+            $email->includeEmailsSendByUs();
         }
 
         $email->orderBy('received_at', 'desc');
@@ -116,6 +120,6 @@ class EmailController extends Controller
             unset($data['labels']);
         }
 
-        $email->update($data);
+        $email->withoutGlobalScopes()->update($data);
     }
 }
