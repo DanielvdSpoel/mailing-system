@@ -12,6 +12,7 @@ use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class LabelResource extends Resource
@@ -54,6 +55,19 @@ class LabelResource extends Resource
                         'pink' => self::getHTMLString('Pink', 'bg-pink-600'),
                         'rose' => self::getHTMLString('Rose', 'bg-rose-600'),
                     ]),
+                Select::make('parent_id')
+                    ->label('Parent')
+                    ->options(function (?Model $record) {
+                        if ($record) {
+                            return Label::where('id', '!=', $record->id)
+                                ->whereNull('parent_id')
+                                ->pluck('name', 'id');
+                        }
+                        return Label::pluck('name', 'id');
+                    })
+                    ->searchable()
+                    ->preload()
+
             ]);
     }
 
@@ -62,6 +76,13 @@ class LabelResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('color')
+                    ->sortable()
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('parent.name')
+                    ->label('Parent')
                     ->sortable()
                     ->searchable(),
 
