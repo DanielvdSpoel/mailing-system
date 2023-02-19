@@ -4,24 +4,22 @@ namespace App\Supports;
 
 class EmailSupport
 {
-
-    static function handlePart($part, $partNumber, $connection, $imapUid, $emailModel): void
+    public static function handlePart($part, $partNumber, $connection, $imapUid, $emailModel): void
     {
         if ($part->subtype == 'PLAIN') {
             $emailModel->text_body = EmailSupport::decodeContent(imap_fetchbody($connection, $imapUid, $partNumber ?? 1, FT_UID), $part->encoding);
-        } else if ($part->subtype == 'HTML') {
+        } elseif ($part->subtype == 'HTML') {
             $emailModel->html_body = EmailSupport::decodeContent(imap_fetchbody($connection, $imapUid, $partNumber ?? 1, FT_UID), $part->encoding);
-        } else if (in_array($part->subtype, ['ALTERNATIVE', 'MIXED', 'RELATED'])) {
-            for ($i = 1 ; $i < count($part->parts) + 1; $i++)
-            {
+        } elseif (in_array($part->subtype, ['ALTERNATIVE', 'MIXED', 'RELATED'])) {
+            for ($i = 1; $i < count($part->parts) + 1; $i++) {
                 $subPart = $part->parts[$i - 1];
-                $newPartNumber = $partNumber !== null ? $partNumber . '.' . $i : $i;
+                $newPartNumber = $partNumber !== null ? $partNumber.'.'.$i : $i;
                 EmailSupport::handlePart($subPart, $newPartNumber, $connection, $imapUid, $emailModel);
             }
         }
     }
 
-    static function decodeContent($content, $encoding)
+    public static function decodeContent($content, $encoding)
     {
         //todo implement more decoders https://www.php.net/manual/en/function.imap-fetchstructure.php
         switch ($encoding) {
@@ -34,7 +32,6 @@ class EmailSupport
             case 4:
                 //quoted printable
                 return imap_qprint($content);
-
         }
     }
 }

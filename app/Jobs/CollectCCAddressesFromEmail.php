@@ -5,7 +5,6 @@ namespace App\Jobs;
 use App\Models\Email;
 use App\Models\EmailAddress;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -21,6 +20,7 @@ class CollectCCAddressesFromEmail implements ShouldQueue
      * @return void
      */
     public Email $email;
+
     public function __construct(Email $email)
     {
         $this->email = $email;
@@ -38,11 +38,11 @@ class CollectCCAddressesFromEmail implements ShouldQueue
 
         foreach ($header->cc as $ccAdress) {
             $ccEmailAdress = EmailAddress::firstOrCreate(
-                ['email' => $ccAdress->mailbox . '@' . $ccAdress->host],
+                ['email' => $ccAdress->mailbox.'@'.$ccAdress->host],
                 [
-                    'label' => $ccAdress->personal ?? $ccAdress->mailbox . '@' . $ccAdress->host,
+                    'label' => $ccAdress->personal ?? $ccAdress->mailbox.'@'.$ccAdress->host,
                     'mailbox' => $ccAdress->mailbox,
-                    'domain' => $ccAdress->host
+                    'domain' => $ccAdress->host,
                 ]
             );
             $this->email->addresses()->attach($ccEmailAdress, ['type' => 'cc']);

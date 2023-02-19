@@ -63,7 +63,7 @@ it('can validate input', function () {
         ->call('create')
         ->assertHasFormErrors([
             'name' => 'required',
-//            'imap_port' => 'numeric|min:1',
+            //            'imap_port' => 'numeric|min:1',
         ]);
 });
 
@@ -87,7 +87,6 @@ it('can retrieve data', function () {
             'smtp_encryption' => $inboxTemplate->smtp_encryption,
         ]);
 });
-
 
 it('can see the delete button', function () {
     Livewire::test(EditInboxTemplate::class, [

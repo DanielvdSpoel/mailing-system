@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\RelationManagers\EmailRelationManager;
 use App\Filament\Resources\LabelResource\Pages;
-use App\Filament\Resources\LabelResource\RelationManagers;
 use App\Models\Label;
 use Filament\Forms;
 use Filament\Forms\Components\Select;
@@ -14,7 +13,6 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use Illuminate\Support\HtmlString;
 
 class LabelResource extends Resource
 {
@@ -55,7 +53,7 @@ class LabelResource extends Resource
                         'fuchsia' => self::getHTMLString('Fuchsia', 'bg-fuchsia-600'),
                         'pink' => self::getHTMLString('Pink', 'bg-pink-600'),
                         'rose' => self::getHTMLString('Rose', 'bg-rose-600'),
-                    ])
+                    ]),
             ]);
     }
 
@@ -107,6 +105,6 @@ class LabelResource extends Resource
 
     private static function getHTMLString($name, $class): string
     {
-        return '<div class="flex space-x-2"><div class="' . $class . ' w-6 h-6 rounded-full"></div><p> ' . $name . '</p></div>';
+        return '<div class="flex space-x-2"><div class="'.$class.' w-6 h-6 rounded-full"></div><p> '.$name.'</p></div>';
     }
 }

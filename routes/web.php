@@ -1,9 +1,6 @@
 <?php
 
 use App\Http\Controllers\EmailController;
-use App\Jobs\ProcessIncomingEmail;
-use App\Models\EmailRule;
-use App\Models\User;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 

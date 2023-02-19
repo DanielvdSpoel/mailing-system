@@ -9,8 +9,8 @@ it('can list labels', function () {
     $label = Label::orderBy('name')->first();
 
     $this->get(route('labels.index'))
-        ->assertJson(fn(AssertableJson $json) => $json->has('data', 10)
-            ->has('data.0', fn(AssertableJson $json) => $json->where('id', $label->id)
+        ->assertJson(fn (AssertableJson $json) => $json->has('data', 10)
+            ->has('data.0', fn (AssertableJson $json) => $json->where('id', $label->id)
                 ->where('name', $label->name)
                 ->where('color', $label->color)
                 ->etc()
@@ -21,18 +21,17 @@ it('can list labels', function () {
 it('can limit labels', function () {
     Label::factory()->count(10)->create();
 
-    $this->get(route('labels.index') . '?limit=5')
-        ->assertJson(fn(AssertableJson $json) => $json->has('data', 5));
+    $this->get(route('labels.index').'?limit=5')
+        ->assertJson(fn (AssertableJson $json) => $json->has('data', 5));
 });
 
-it('can search for a label', function() {
+it('can search for a label', function () {
     Label::factory()->count(10)->create();
     Label::factory()->create(['name' => 'Test Label']);
 
-    $this->get(route('labels.index') . '?search=Test')
-        ->assertJson(fn(AssertableJson $json) => $json->has('data', 1)
-            ->has('data.0', fn (AssertableJson $json) =>
-            $json->where('name', 'Test Label')
+    $this->get(route('labels.index').'?search=Test')
+        ->assertJson(fn (AssertableJson $json) => $json->has('data', 1)
+            ->has('data.0', fn (AssertableJson $json) => $json->where('name', 'Test Label')
                 ->etc()
             )
         );

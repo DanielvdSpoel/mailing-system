@@ -30,8 +30,6 @@ class EmailFactory extends Factory
             'conversation_id' => Conversation::factory(),
             'inbox_id' => Inbox::factory(),
         ];
-
-
     }
 
     public function archived(): Factory
@@ -51,6 +49,4 @@ class EmailFactory extends Factory
             ];
         });
     }
-
-
 }

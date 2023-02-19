@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Filament\Notifications\Notification;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,10 +9,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Sagalbot\Encryptable\Encryptable;
-use Webklex\PHPIMAP\Client;
-use Webklex\PHPIMAP\ClientManager;
-use Webklex\PHPIMAP\Exceptions\ConnectionFailedException;
-use Webklex\PHPIMAP\Exceptions\MaskNotFoundException;
 
 class Inbox extends Model
 {
@@ -37,7 +32,6 @@ class Inbox extends Model
         'smtp_username',
         'smtp_password',
     ];
-
 
     protected $fillable = [
         'name',
@@ -72,7 +66,7 @@ class Inbox extends Model
 
     public function getConnectionString(): string
     {
-        return '{' . $this->imap_host . ':' . $this->imap_port .'/' . $this->imap_encryption . '}';
+        return '{'.$this->imap_host.':'.$this->imap_port.'/'.$this->imap_encryption.'}';
     }
 
     public function getFolders(): array
@@ -82,6 +76,7 @@ class Inbox extends Model
             $connection = $this->getClientConnection($connectionString);
             $folders = imap_list($connection, $connectionString, '*');
             imap_close($connection);
+
             return $folders;
         } catch (\Exception $e) {
             return [];
@@ -95,6 +90,7 @@ class Inbox extends Model
                 return $mapping;
             }
         }
+
         return [];
     }
 

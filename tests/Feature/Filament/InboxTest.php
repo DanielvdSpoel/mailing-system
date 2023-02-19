@@ -6,7 +6,6 @@ use App\Filament\Resources\InboxResource\Pages\ListInboxes;
 use App\Filament\Resources\InboxResource\Pages\ViewInbox;
 use App\Models\Inbox;
 use Filament\Pages\Actions\DeleteAction;
-use function Pest\Faker\faker;
 use function Pest\Livewire\livewire;
 
 it('has inboxes page', function () {
@@ -95,7 +94,6 @@ it('can retrieve data', function () {
             'smtp_encryption' => $inboxTemplate->smtp_encryption,
         ]);
 });
-
 
 it('can see the delete button', function () {
     Livewire::test(EditInbox::class, [

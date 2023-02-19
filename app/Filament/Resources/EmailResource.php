@@ -3,18 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EmailResource\Pages;
-use App\Filament\Resources\EmailResource\RelationManagers;
 use App\Filament\Resources\EmailResource\Widgets\EmailContent;
 use App\Models\Email;
 use Filament\Forms;
-use Filament\Forms\Components\ViewField;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class EmailResource extends Resource
 {

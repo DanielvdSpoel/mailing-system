@@ -9,31 +9,28 @@ use Filament\Forms\Components\Select;
 
 class AssignLabel implements AvailableActionsInterface
 {
-
-    static function executeAction(Email $email, array $settings)
+    public static function executeAction(Email $email, array $settings)
     {
         $label = Label::find($settings['label']);
         dd($label);
         // TODO: Implement executeAction() method.
     }
 
-
-
-    static function getBlock(): Block
+    public static function getBlock(): Block
     {
         return Block::make('AssignLabel')
             ->icon('heroicon-o-tag')
             ->schema([
                 Select::make('label')
                     ->options(Label::all()->pluck('name', 'id'))
-                    ->searchable()
+                    ->searchable(),
             ]);
     }
 
-    static function getFakeData(): array
+    public static function getFakeData(): array
     {
         return [
-            'label' => Label::factory()->create()->id
+            'label' => Label::factory()->create()->id,
         ];
     }
 }

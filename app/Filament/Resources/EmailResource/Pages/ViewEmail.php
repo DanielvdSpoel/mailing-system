@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\EmailResource\Pages;
 
 use App\Filament\Resources\EmailResource;
-use Filament\Pages\Actions;
 use Filament\Resources\Pages\ViewRecord;
 
 class ViewEmail extends ViewRecord

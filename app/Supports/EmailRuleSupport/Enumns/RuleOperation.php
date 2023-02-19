@@ -14,6 +14,7 @@ enum RuleOperation
     {
         $a = strtolower($a);
         $b = strtolower($b);
+
         return match ($this->name) {
             'Contains' => str_contains($a, $b),
             'Equals' => $a == $b,
@@ -22,17 +23,16 @@ enum RuleOperation
             'Empty' => empty($a),
             default => false,
         };
-
     }
 
     public static function fromName(string $name): self
     {
         foreach (self::cases() as $status) {
-            if( $name === $status->name ){
+            if ($name === $status->name) {
                 return $status;
             }
         }
-        throw new \ValueError("$name is not a valid backing value for enum " . self::class );
+        throw new \ValueError("$name is not a valid backing value for enum ".self::class);
     }
 
     public static function tryFromName(string $name): self|null
@@ -43,5 +43,4 @@ enum RuleOperation
             return null;
         }
     }
-
 }

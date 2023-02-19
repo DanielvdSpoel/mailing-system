@@ -3,13 +3,8 @@
 use App\Filament\Resources\EmailRuleResource\Pages\CreateEmailRule;
 use App\Filament\Resources\EmailRuleResource\Pages\EditEmailRule;
 use App\Filament\Resources\EmailRuleResource\Pages\ListEmailRules;
-use App\Filament\Resources\InboxTemplateResource\Pages\CreateInboxTemplate;
-use App\Filament\Resources\InboxTemplateResource\Pages\EditInboxTemplate;
-use App\Filament\Resources\InboxTemplateResource\Pages\ListInboxTemplates;
 use App\Models\EmailRule;
-use App\Models\InboxTemplate;
 use Filament\Pages\Actions\DeleteAction;
-use function Pest\Faker\faker;
 use function Pest\Livewire\livewire;
 
 it('has email rule page', function () {

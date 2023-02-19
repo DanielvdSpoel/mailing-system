@@ -67,7 +67,7 @@ class EmailAddressResource extends Resource
     public static function getRelations(): array
     {
         return [
-            EmailRelationManager::class
+            EmailRelationManager::class,
         ];
     }
 

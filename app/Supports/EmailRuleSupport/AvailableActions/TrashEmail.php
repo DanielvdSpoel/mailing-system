@@ -7,20 +7,19 @@ use Filament\Forms\Components\Builder\Block;
 
 class TrashEmail implements AvailableActionsInterface
 {
-    static function executeAction(Email $email, array $settings)
+    public static function executeAction(Email $email, array $settings)
     {
         // TODO: Implement executeAction() method.
     }
 
-
-    static function getBlock(): Block
+    public static function getBlock(): Block
     {
         return Block::make('TrashEmail')
             ->icon('heroicon-o-trash')
             ->schema([]);
     }
 
-    static function getFakeData(): array
+    public static function getFakeData(): array
     {
         return [];
     }

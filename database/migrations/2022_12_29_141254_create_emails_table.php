@@ -1,7 +1,6 @@
 <?php
 
 use App\Models\Conversation;
-use App\Models\EmailAdress;
 use App\Models\Inbox;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;

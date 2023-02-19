@@ -5,13 +5,9 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\InboxTemplateResource\Pages;
 use App\Filament\Resources\InboxTemplateResource\RelationManagers;
 use App\Models\InboxTemplate;
-use Awcodes\FilamentTableRepeater\Components\TableRepeater;
-use Filament\Forms;
-use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Fieldset;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
@@ -52,7 +48,6 @@ class InboxTemplateResource extends Resource
                                 'ssl' => 'SSL',
                                 'tls' => 'TLS',
                             ]),
-
 
                     ]),
                 Fieldset::make('SMTP settings')
@@ -102,7 +97,7 @@ class InboxTemplateResource extends Resource
     public static function getRelations(): array
     {
         return [
-            RelationManagers\InboxesRelationManager::class
+            RelationManagers\InboxesRelationManager::class,
         ];
     }
 

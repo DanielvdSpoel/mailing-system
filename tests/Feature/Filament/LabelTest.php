@@ -1,11 +1,11 @@
 <?php
 
-use Filament\Pages\Actions\DeleteAction;
-use function Pest\Livewire\livewire;
 use App\Filament\Resources\LabelResource\Pages\CreateLabel;
 use App\Filament\Resources\LabelResource\Pages\EditLabel;
 use App\Filament\Resources\LabelResource\Pages\ListLabels;
 use App\Models\Label;
+use Filament\Pages\Actions\DeleteAction;
+use function Pest\Livewire\livewire;
 
 it('has labels page', function () {
     Label::factory()->count(10)->create();
@@ -58,7 +58,6 @@ it('can retrieve data', function () {
             'color' => $label->color,
         ]);
 });
-
 
 it('can see the delete button', function () {
     Livewire::test(EditLabel::class, [

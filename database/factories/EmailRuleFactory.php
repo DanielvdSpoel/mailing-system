@@ -4,7 +4,6 @@ namespace Database\Factories;
 
 use App\Supports\EmailRuleSupport\EmailRuleHandler;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Carbon;
 
 class EmailRuleFactory extends Factory
 {

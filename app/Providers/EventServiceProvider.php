@@ -24,7 +24,7 @@ class EventServiceProvider extends ServiceProvider
         EmailReceived::class => [
             DispatchEmailMetaCollectingJobs::class,
             SendEmailReceivedNotification::class,
-        ]
+        ],
     ];
 
     /**

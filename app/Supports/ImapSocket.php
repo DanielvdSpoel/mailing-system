@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Supports;
+
 class ImapSocket
 {
     private $socket;
@@ -28,10 +29,9 @@ class ImapSocket
         }
 
         $fd = fsockopen($server, $port, $errno);
-        if (!$errno) {
+        if (! $errno) {
             return $fd;
-        }
-        else {
+        } else {
             throw new \Exception('Unable to connect');
         }
     }
@@ -45,7 +45,7 @@ class ImapSocket
         dd($result);
 
         $result = array_pop($result);
-        if (!str_starts_with($result, '. OK ')) {
+        if (! str_starts_with($result, '. OK ')) {
             throw new \Exception('Unable to login');
         }
     }
@@ -63,7 +63,7 @@ class ImapSocket
         $result = $this->send("SELECT $mailbox");
         $result = array_pop($result);
 
-        if (!str_starts_with($result, '. OK ')) {
+        if (! str_starts_with($result, '. OK ')) {
             throw new \Exception("Unable to select mailbox '$mailbox'");
         }
     }
@@ -71,11 +71,10 @@ class ImapSocket
     public function get_flags(int $uid): array
     {
         $result = $this->send("FETCH $uid (FLAGS)");
-        preg_match_all("|\\* \\d+ FETCH \\(FLAGS \\((.*)\\)\\)|", $result[0], $matches);
+        preg_match_all('|\\* \\d+ FETCH \\(FLAGS \\((.*)\\)\\)|', $result[0], $matches);
         if (isset($matches[1][0])) {
             return explode(' ', $matches[1][0]);
-        }
-        else {
+        } else {
             return [];
         }
     }
@@ -89,8 +88,7 @@ class ImapSocket
         $count = fwrite($this->socket, $query);
         if ($count === strlen($query)) {
             return $this->gets();
-        }
-        else {
+        } else {
             throw new \Exception("Unable to execute '$cmd' command");
         }
     }
