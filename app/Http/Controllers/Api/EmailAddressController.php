@@ -22,7 +22,7 @@ class EmailAddressController extends Controller
             $emailAddresses->limit($request->get('limit'));
         }
 
-        $emailAddresses->orderBy('email');
+        $emailAddresses->orderBy('label');
 
         return EmailAddressResource::collection($emailAddresses->get());
     }

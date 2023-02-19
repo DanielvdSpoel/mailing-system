@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/auth/login', [AuthenticationController::class, 'login']);
+Route::post('/auth/login', [AuthenticationController::class, 'login'])->name('auth.login');
 
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -36,6 +36,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::get('/user', function (Request $request) {
         return $request->user();
-    });
+    })->name('user');
 });
 
