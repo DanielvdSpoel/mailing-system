@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Resources\LabelResource;
 use App\Models\Email;
 use Illuminate\Testing\Fluent\AssertableJson;
 
