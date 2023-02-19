@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('email_rules', function (Blueprint $table) {
             $table->id();
-            $table->string('label');
+            $table->string('name');
             $table->json('conditions');
             $table->json('actions');
             $table->timestamps();

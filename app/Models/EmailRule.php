@@ -10,7 +10,7 @@ class EmailRule extends Model
     use HasFactory;
 
     protected $fillable = [
-        'label',
+        'name',
         'conditions',
         'actions',
         'reversed',

@@ -12,7 +12,7 @@ class EmailAddress extends Model
     use HasFactory, SoftDeletes;
 
     protected $fillable = [
-        'label',
+        'name',
         'mailbox',
         'domain',
         'email',
