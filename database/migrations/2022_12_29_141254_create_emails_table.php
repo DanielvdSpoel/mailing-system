@@ -25,6 +25,7 @@ return new class extends Migration
             $table->dateTime('received_at');
             $table->dateTime('archived_at')->nullable();
             $table->dateTime('deleted_at')->nullable();
+            $table->dateTime('snoozed_until')->nullable();
             $table->dateTime('read_at')->nullable();
             $table->boolean('is_draft')->default(false);
             $table->boolean('email_send_by_us')->default(false);

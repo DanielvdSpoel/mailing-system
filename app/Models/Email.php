@@ -29,6 +29,7 @@ class Email extends Model
         'deleted_at',
         'read_at',
         'is_draft',
+        'snoozed_until',
         'email_send_by_us',
         'inbox_id',
         'conversation_id',
