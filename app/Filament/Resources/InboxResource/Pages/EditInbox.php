@@ -19,7 +19,7 @@ class EditInbox extends EditRecord
             Actions\DeleteAction::make(),
             Actions\ForceDeleteAction::make(),
             Actions\RestoreAction::make(),
-            Actions\Action::make('Test connection')->action('testConnection')
+            Actions\Action::make('Test connection')->action('testConnection'),
         ];
     }
 
@@ -32,7 +32,7 @@ class EditInbox extends EditRecord
                     $found = true;
                 }
             }
-            if (!$found) {
+            if (! $found) {
                 $this->data['folder_to_flags_mapping'][] = [
                     'folder' => $folder,
                 ];
@@ -46,6 +46,7 @@ class EditInbox extends EditRecord
             $data['smtp_username'] = $data['imap_username'];
             $data['smtp_password'] = $data['imap_password'];
         }
+
         return $data;
     }
 

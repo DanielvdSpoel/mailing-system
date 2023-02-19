@@ -2,9 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Scopes\ExcludeArchivedScope;
-use App\Models\Scopes\ExcludeDraftsScope;
-use App\Models\Scopes\ExcludeEmailsSendByUsScope;
 use App\Supports\EmailSupport;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -38,7 +35,6 @@ class Email extends Model
         'message_id',
         'message_uid',
     ];
-
 
     /*protected array $encryptable = [
         'subject',
@@ -112,22 +108,22 @@ class Email extends Model
 
         $sender = $header->from[0];
         $senderEmailAddress = EmailAddress::firstOrCreate(
-            ['email' => $sender->mailbox . '@' . $sender->host],
+            ['email' => $sender->mailbox.'@'.$sender->host],
             [
-                'label' => $sender->personal ?? $sender->mailbox . '@' . $sender->host,
+                'label' => $sender->personal ?? $sender->mailbox.'@'.$sender->host,
                 'mailbox' => $sender->mailbox,
-                'domain' => $sender->host
+                'domain' => $sender->host,
             ]
         );
         $email->sender_address_id = $senderEmailAddress->id;
 
         $reply_to = $header->reply_to[0];
         $replyToEmailAddress = EmailAddress::firstOrCreate(
-            ['email' => $reply_to->mailbox . '@' . $reply_to->host],
+            ['email' => $reply_to->mailbox.'@'.$reply_to->host],
             [
-                'label' => $reply_to->personal ?? $reply_to->mailbox . '@' . $reply_to->host,
+                'label' => $reply_to->personal ?? $reply_to->mailbox.'@'.$reply_to->host,
                 'mailbox' => $reply_to->mailbox,
-                'domain' => $reply_to->host
+                'domain' => $reply_to->host,
             ]
         );
         $email->reply_to_address_id = $replyToEmailAddress->id;
@@ -151,7 +147,6 @@ class Email extends Model
             $email->email_send_by_us = true;
         }
 
-
         //Handle conversations
         if (property_exists($header, 'in_reply_to')) {
             $inReplyTo = Email::where('message_id', $header->in_reply_to)->first();
@@ -167,20 +162,17 @@ class Email extends Model
             }
         }
 
-
         try {
             $email->save();
+
             return $email;
         } catch (\Exception $e) {
             Log::error($e->getMessage());
             $email->html_body = null;
             $email->text_body = null;
             $email->save();
+
             return $email;
         }
     }
-
-
-
-
 }

@@ -8,8 +8,7 @@ use Filament\Forms\Components\TextInput;
 
 class EmailHtmlBody implements AvailableAttributesInterface
 {
-
-    static function getValueSchema(): array
+    public static function getValueSchema(): array
     {
         return [
             TextInput::make('value')
@@ -18,7 +17,7 @@ class EmailHtmlBody implements AvailableAttributesInterface
         ];
     }
 
-    static function getAvailableOperations(): array
+    public static function getAvailableOperations(): array
     {
         return [
             RuleOperation::Contains,
@@ -29,7 +28,7 @@ class EmailHtmlBody implements AvailableAttributesInterface
         ];
     }
 
-    static function getAttributeValue(Email $email)
+    public static function getAttributeValue(Email $email)
     {
         return $email->html_body;
     }

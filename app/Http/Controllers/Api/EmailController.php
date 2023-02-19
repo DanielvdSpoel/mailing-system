@@ -33,28 +33,28 @@ class EmailController extends Controller
 
         if ($request->search) {
             $email->where(function ($query) use ($request) {
-                $query->where('subject', 'like', '%' . $request->search . '%')
-                    ->orWhere('text_body', 'like', '%' . $request->search . '%')
-                    ->orWhere('html_body', 'like', '%' . $request->search . '%')
+                $query->where('subject', 'like', '%'.$request->search.'%')
+                    ->orWhere('text_body', 'like', '%'.$request->search.'%')
+                    ->orWhere('html_body', 'like', '%'.$request->search.'%')
                     ->orWhereHas('senderAddress', function ($query) use ($request) {
-                        $query->where('email', 'like', '%' . $request->search . '%');
+                        $query->where('email', 'like', '%'.$request->search.'%');
                     });
             });
         }
 
-        if (!$request->get('included_archived', false)) {
+        if (! $request->get('included_archived', false)) {
             $email->whereNull('archived_at');
         }
 
-        if (!$request->get('included_deleted', false)) {
+        if (! $request->get('included_deleted', false)) {
             $email->whereNull('deleted_at');
         }
 
-        if (!$request->get('included_drafts', false)) {
+        if (! $request->get('included_drafts', false)) {
             $email->where('is_draft', false);
         }
 
-        if (!$request->get('included_emails_send_by_us', false)) {
+        if (! $request->get('included_emails_send_by_us', false)) {
             $email->where('email_send_by_us', false);
         }
 
@@ -73,7 +73,6 @@ class EmailController extends Controller
         }
 
         return EmailResource::collection($email);
-
     }
 
     public function show(Email $email)
@@ -105,10 +104,10 @@ class EmailController extends Controller
     private function updateEmail(Email $email, $data): void
     {
         foreach (['is_archived', 'is_deleted', 'is_read'] as $key) {
-            if (!isset($data[$key])) {
+            if (! isset($data[$key])) {
                 continue;
             }
-            $data[explode('_', $key)[1] . '_at'] = $data[$key] ?? false ? Carbon::now() : null;
+            $data[explode('_', $key)[1].'_at'] = $data[$key] ?? false ? Carbon::now() : null;
             unset($data[$key]);
         }
 
@@ -118,7 +117,5 @@ class EmailController extends Controller
         }
 
         $email->update($data);
-
     }
-
 }

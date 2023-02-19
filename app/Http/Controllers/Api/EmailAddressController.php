@@ -14,8 +14,8 @@ class EmailAddressController extends Controller
         $emailAddresses = EmailAddress::query();
 
         if ($request->get('search')) {
-            $emailAddresses->where('email', 'like', '%' . $request->get('search') . '%')
-                ->orWhere('label', 'like', '%' . $request->get('search') . '%');
+            $emailAddresses->where('email', 'like', '%'.$request->get('search').'%')
+                ->orWhere('label', 'like', '%'.$request->get('search').'%');
         }
 
         if ($request->get('limit')) {

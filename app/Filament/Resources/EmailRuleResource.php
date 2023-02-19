@@ -3,7 +3,6 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EmailRuleResource\Pages;
-use App\Filament\Resources\EmailRuleResource\RelationManagers;
 use App\Models\EmailRule;
 use App\Supports\EmailRuleSupport\EmailRuleHandler;
 use Closure;
@@ -16,9 +15,9 @@ use Filament\Forms\Components\TextInput;
 use Filament\Resources\Form;
 use Filament\Resources\Resource;
 use Filament\Resources\Table;
+use function Filament\Support\get_model_label;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Model;
-use function Filament\Support\get_model_label;
 
 class EmailRuleResource extends Resource
 {
@@ -35,16 +34,17 @@ class EmailRuleResource extends Resource
                     ->maxLength(255),
                 Repeater::make('conditions')
                     ->columns(3)
-                    ->label("If")
+                    ->label('If')
                     ->schema([
                         Grid::make(3)
                             ->schema([
                                 Select::make('field')
                                     ->options(function () {
-                                        $options = array();
+                                        $options = [];
                                         foreach (EmailRuleHandler::$availableAttributes as $value) {
                                             $options[array_search($value, EmailRuleHandler::$availableAttributes)] = get_model_label($value);
                                         }
+
                                         return $options;
                                     })
                                     ->reactive()
@@ -52,26 +52,28 @@ class EmailRuleResource extends Resource
                                 Select::make('operation')
                                     ->options(function (Closure $get) {
                                         $availableOperations = EmailRuleHandler::getAvailableOperations($get('field'));
-                                        $options = array();
+                                        $options = [];
                                         foreach (array_column($availableOperations, 'name') as $value) {
                                             $name = str_replace('_', ' ', $value);
                                             $name = ucfirst($name);
                                             $options[$value] = $name;
                                         }
+
                                         return $options;
                                     })
                                     ->hidden(function (Closure $get) {
-                                        return !EmailRuleHandler::getAvailableOperations($get('field'));
+                                        return ! EmailRuleHandler::getAvailableOperations($get('field'));
                                     })
                                     ->required(),
                                 Grid::make(1)
                                     ->schema(function (Closure $get) {
                                         $field = $get('field');
+
                                         return EmailRuleHandler::getValueSchema($field);
                                     })->columnSpan(1),
                             ]),
                         Checkbox::make('reversed')
-                            ->default(false)
+                            ->default(false),
                     ])
                     ->createItemButtonLabel('Add extra condition'),
                 Builder::make('actions')
@@ -79,8 +81,7 @@ class EmailRuleResource extends Resource
                     ->createItemButtonLabel('Add extra action')
                     ->schema(function () {
                         return EmailRuleHandler::getActionBlocks();
-                    })->minItems(1)
-
+                    })->minItems(1),
 
             ])->columns(1);
     }

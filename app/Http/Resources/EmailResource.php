@@ -24,10 +24,10 @@ class EmailResource extends JsonResource
             'labels' => LabelResource::collection($this->labels),
             'received_at' => $this->received_at,
             'conversation' => $this->conversation,
-            'is_read' => (bool)$this->read_at,
-            'is_draft' => (bool)$this->is_draft,
-            'is_archived' => (bool)$this->archived_at,
-            'is_deleted' => (bool)$this->deleted_at,
+            'is_read' => (bool) $this->read_at,
+            'is_draft' => (bool) $this->is_draft,
+            'is_archived' => (bool) $this->archived_at,
+            'is_deleted' => (bool) $this->deleted_at,
 
         ];
     }

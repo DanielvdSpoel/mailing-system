@@ -3,9 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Email;
-use App\Supports\EmailSupport;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -22,6 +20,7 @@ class SaveEmailAttachments implements ShouldQueue
      * @return void
      */
     public Email $email;
+
     public function __construct(Email $email)
     {
         $this->email = $email;
@@ -42,7 +41,7 @@ class SaveEmailAttachments implements ShouldQueue
         dd($structure);
     }
 
-    public function handlePart($part, $partNumber, $connection, $message_uid, $email )
+    public function handlePart($part, $partNumber, $connection, $message_uid, $email)
     {
         if ($part->ifdisposition == 1 && $part->disposition == 'ATTACHMENT') {
             $filename = $part->dparameters[0]->value;
@@ -53,15 +52,13 @@ class SaveEmailAttachments implements ShouldQueue
                 'filename' => $filename,
             ]);
 
-            Storage::disk('local')->put('/attachments/' . $email->id . '/' . $model->id . '-' . $filename, $attachment);
-            $model->path = '/attachments/' . $email->id . '/' . $model->id . '-' . $filename;
+            Storage::disk('local')->put('/attachments/'.$email->id.'/'.$model->id.'-'.$filename, $attachment);
+            $model->path = '/attachments/'.$email->id.'/'.$model->id.'-'.$filename;
             $model->save();
-
-        } else if (in_array($part->subtype, ['ALTERNATIVE', 'MIXED', 'RELATED'])) {
-            for ($i = 1 ; $i < count($part->parts) + 1; $i++)
-            {
+        } elseif (in_array($part->subtype, ['ALTERNATIVE', 'MIXED', 'RELATED'])) {
+            for ($i = 1; $i < count($part->parts) + 1; $i++) {
                 $subPart = $part->parts[$i - 1];
-                $newPartNumber = $partNumber !== null ? $partNumber . '.' . $i : $i;
+                $newPartNumber = $partNumber !== null ? $partNumber.'.'.$i : $i;
                 self::handlePart($subPart, $newPartNumber, $connection, $message_uid, $email);
             }
         }

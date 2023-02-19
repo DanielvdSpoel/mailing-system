@@ -14,7 +14,7 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }
@@ -24,17 +24,16 @@ class AppServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         Filament::serving(function () {
-
             Filament::registerTheme(
                 mix('css/filament.css'),
             );
         });
 
         FilamentEnvironmentIndicator::configureUsing(function (FilamentEnvironmentIndicator $indicator) {
-            $indicator->visible = fn () => !App::environment('production');
+            $indicator->visible = fn () => ! App::environment('production');
         }, isImportant: true);
     }
 }

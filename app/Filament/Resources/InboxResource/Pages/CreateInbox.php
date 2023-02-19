@@ -3,7 +3,6 @@
 namespace App\Filament\Resources\InboxResource\Pages;
 
 use App\Filament\Resources\InboxResource;
-use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
 
 class CreateInbox extends CreateRecord

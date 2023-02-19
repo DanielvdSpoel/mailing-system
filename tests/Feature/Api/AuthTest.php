@@ -22,5 +22,5 @@ it('can login', function () {
         ->post(route('auth.login'), [
             'email' => $user->email,
             'password' => 'password',
-        ])->assertJson(fn(AssertableJson $json) => $json->has('token'));
+        ])->assertJson(fn (AssertableJson $json) => $json->has('token'));
 });

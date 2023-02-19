@@ -72,7 +72,6 @@ it('can retrieve data', function () {
         ]);
 });
 
-
 it('can see the delete button', function () {
     Livewire::test(EditEmailAddress::class, [
         'record' => EmailAddress::factory()->create()->id,

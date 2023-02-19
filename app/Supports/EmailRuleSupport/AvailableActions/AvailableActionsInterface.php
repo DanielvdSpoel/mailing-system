@@ -7,7 +7,9 @@ use Filament\Forms\Components\Builder\Block;
 
 interface AvailableActionsInterface
 {
-    static function getBlock(): Block;
-    static function getFakeData(): array;
-    static function executeAction(Email $email, array $settings);
+    public static function getBlock(): Block;
+
+    public static function getFakeData(): array;
+
+    public static function executeAction(Email $email, array $settings);
 }

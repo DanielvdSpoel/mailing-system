@@ -13,7 +13,7 @@ class EmailRule extends Model
         'label',
         'conditions',
         'actions',
-        'reversed'
+        'reversed',
     ];
 
     /**
@@ -25,6 +25,4 @@ class EmailRule extends Model
         'conditions' => 'array',
         'actions' => 'array',
     ];
-
-
 }

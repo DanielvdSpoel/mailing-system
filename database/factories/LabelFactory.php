@@ -14,11 +14,11 @@ class LabelFactory extends Factory
      *
      * @return array<string, mixed>
      */
-    public function definition()
+    public function definition(): array
     {
         return [
-            'name' => $this->faker->word(),
-            'color' => $this->faker->randomElement(['red', 'green', 'blue', 'yellow', 'purple', 'pink', 'orange', 'gray']),
+            'name' => fake()->word(),
+            'color' => fake()->randomElement(['red', 'green', 'blue', 'yellow', 'purple', 'pink', 'orange', 'gray']),
         ];
     }
 }

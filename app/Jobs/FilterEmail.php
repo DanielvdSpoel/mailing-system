@@ -7,7 +7,6 @@ use App\Models\EmailRule;
 use App\Supports\EmailRuleSupport\EmailRuleHandler;
 use App\Supports\EmailRuleSupport\Enumns\RuleOperation;
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
@@ -37,15 +36,14 @@ class FilterEmail implements ShouldQueue
     public function handle()
     {
         EmailRule::all()->each(function (EmailRule $rule) {
-
             $shouldApply = true;
 
             foreach ($rule->conditions as $condition) {
                 $operation = RuleOperation::tryFromName($condition['operation']);
                 $attribute = EmailRuleHandler::$availableAttributes[$condition['field']];
                 $value = $attribute::getAttributeValue($this->email);
-                $result = $condition['reversed'] ? !$operation->execute($value, $condition['value']) : $operation->execute($value, $condition['value']);
-                if (!$result) {
+                $result = $condition['reversed'] ? ! $operation->execute($value, $condition['value']) : $operation->execute($value, $condition['value']);
+                if (! $result) {
                     $shouldApply = false;
                 }
             }

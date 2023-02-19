@@ -14,7 +14,7 @@ class LabelController extends Controller
         $labels = Label::query();
 
         if ($request->get('search')) {
-            $labels->where('name', 'like', '%' . $request->get('search') . '%');
+            $labels->where('name', 'like', '%'.$request->get('search').'%');
         }
 
         if ($request->get('limit')) {

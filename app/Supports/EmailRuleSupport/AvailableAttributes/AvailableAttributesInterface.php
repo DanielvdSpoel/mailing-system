@@ -6,9 +6,9 @@ use App\Models\Email;
 
 interface AvailableAttributesInterface
 {
-    static function getValueSchema(): array;
+    public static function getValueSchema(): array;
 
-    static function getAvailableOperations(): array;
+    public static function getAvailableOperations(): array;
 
-    static function getAttributeValue(Email $email);
+    public static function getAttributeValue(Email $email);
 }

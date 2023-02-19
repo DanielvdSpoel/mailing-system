@@ -10,23 +10,25 @@ use App\Supports\EmailRuleSupport\AvailableAttributes\EmailTextBody;
 
 class EmailRuleHandler
 {
-    static array $availableActions = [
+    public static array $availableActions = [
         'TrashEmail' => TrashEmail::class,
         'AssignLabel' => AssignLabel::class,
     ];
 
-    static array $availableAttributes = [
+    public static array $availableAttributes = [
         'EmailSubject' => EmailSubject::class,
         'EmailTextBody' => EmailTextBody::class,
         'EmailHtmlBody' => EmailHtmlBody::class,
     ];
 
-    static function getAvailableOperations(?string $attribute): array
+    public static function getAvailableOperations(?string $attribute): array
     {
         if ($attribute) {
             $attribute = self::$availableAttributes[$attribute];
+
             return $attribute::getAvailableOperations();
         }
+
         return [];
     }
 
@@ -34,8 +36,10 @@ class EmailRuleHandler
     {
         if ($attribute) {
             $attribute = self::$availableAttributes[$attribute];
+
             return $attribute::getValueSchema();
         }
+
         return [];
     }
 
@@ -43,8 +47,10 @@ class EmailRuleHandler
     {
         if ($attribute) {
             $attribute = self::$availableActions[$attribute];
+
             return $attribute::getSettingsSchema();
         }
+
         return [];
     }
 
@@ -54,7 +60,7 @@ class EmailRuleHandler
         foreach (self::$availableActions as $action) {
             $blocks[] = $action::getBlock();
         }
+
         return $blocks;
     }
-
 }

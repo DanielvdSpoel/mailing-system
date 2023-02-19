@@ -1,11 +1,8 @@
 <?php
 
-use App\Filament\Resources\EmailResource\Pages\CreateEmail;
-use App\Filament\Resources\EmailResource\Pages\EditEmail;
 use App\Filament\Resources\EmailResource\Pages\ListEmails;
 use App\Filament\Resources\EmailResource\Pages\ViewEmail;
 use App\Models\Email;
-use Filament\Pages\Actions\DeleteAction;
 use function Pest\Livewire\livewire;
 
 it('Can list emails', function () {

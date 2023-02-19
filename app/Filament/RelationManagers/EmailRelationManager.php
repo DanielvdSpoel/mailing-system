@@ -27,7 +27,7 @@ class EmailRelationManager extends RelationManager
         return $table
             ->columns(EmailResource::getTableSchema())
             ->filters([
-                Tables\Filters\TrashedFilter::make()
+                Tables\Filters\TrashedFilter::make(),
             ])
             ->headerActions([
             ])

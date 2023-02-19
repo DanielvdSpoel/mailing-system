@@ -24,7 +24,7 @@ class EventServiceProvider extends ServiceProvider
         EmailReceived::class => [
             DispatchEmailMetaCollectingJobs::class,
             SendEmailReceivedNotification::class,
-        ]
+        ],
     ];
 
     /**
@@ -32,8 +32,16 @@ class EventServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
+    }
+
+    /**
+     * Determine if events and listeners should be automatically discovered.
+     */
+    public function shouldDiscoverEvents(): bool
+    {
+        return false;
     }
 }

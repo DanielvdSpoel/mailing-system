@@ -24,5 +24,4 @@ class Label extends Model
     {
         return $this->belongsToMany(Email::class);
     }
-
 }

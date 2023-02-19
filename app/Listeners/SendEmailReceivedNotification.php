@@ -3,10 +3,8 @@
 namespace App\Listeners;
 
 use App\Events\EmailReceived;
-use \App\Notifications\EmailReceived as EmailReceivedNotification;
 use App\Models\User;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
+use App\Notifications\EmailReceived as EmailReceivedNotification;
 use Notification;
 
 class SendEmailReceivedNotification
@@ -23,15 +21,9 @@ class SendEmailReceivedNotification
 
     /**
      * Handle the event.
-     *
-     * @param  \App\Events\EmailReceived  $event
-     * @return void
      */
     public function handle(EmailReceived $event): void
     {
         Notification::send(User::all(), new EmailReceivedNotification($event->email));
-
-
-
     }
 }

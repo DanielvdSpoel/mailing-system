@@ -6,8 +6,6 @@ use App\Events\EmailReceived;
 use App\Jobs\CollectCCAddressesFromEmail;
 use App\Jobs\FilterEmail;
 use App\Jobs\SaveEmailAttachments;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Queue\InteractsWithQueue;
 
 class DispatchEmailMetaCollectingJobs
 {
@@ -24,7 +22,6 @@ class DispatchEmailMetaCollectingJobs
     /**
      * Handle the event.
      *
-     * @param  \App\Events\EmailReceived  $event
      * @return void
      */
     public function handle(EmailReceived $event)

@@ -15,9 +15,9 @@ class InboxController extends Controller
             ->with(['senderAddresses']);
 
         if ($request->get('search')) {
-            $inboxes->where('name', 'like', '%' . $request->get('search') . '%')
+            $inboxes->where('name', 'like', '%'.$request->get('search').'%')
                 ->orWhereHas('senderAddresses', function ($query) use ($request) {
-                    $query->where('email', 'like', '%' . $request->get('search') . '%');
+                    $query->where('email', 'like', '%'.$request->get('search').'%');
                 });
         }
 

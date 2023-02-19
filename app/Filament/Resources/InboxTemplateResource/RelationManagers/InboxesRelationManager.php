@@ -9,8 +9,6 @@ use Filament\Resources\RelationManagers\RelationManager;
 use Filament\Resources\Table;
 use Filament\Tables;
 use Filament\Tables\Actions\ViewAction;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class InboxesRelationManager extends RelationManager
 {
@@ -43,7 +41,7 @@ class InboxesRelationManager extends RelationManager
             ])
             ->actions([
                 ViewAction::make()
-                    ->url(fn ($record) => InboxResource::getUrl('edit', ['record' => $record]))
+                    ->url(fn ($record) => InboxResource::getUrl('edit', ['record' => $record])),
             ])
             ->bulkActions([
             ]);

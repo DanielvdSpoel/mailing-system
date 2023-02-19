@@ -10,7 +10,7 @@ class EmailAttachmentFactory extends Factory
     public function definition(): array
     {
         return [
-            'filename' => $this->faker->word(),
+            'filename' => fake()->word(),
             'inbox_id' => Email::factory(),
         ];
     }

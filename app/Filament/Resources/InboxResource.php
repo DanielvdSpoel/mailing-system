@@ -4,7 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Filament\RelationManagers\EmailRelationManager;
 use App\Filament\Resources\InboxResource\Pages;
-use App\Filament\Resources\InboxResource\RelationManagers;
 use App\Models\Inbox;
 use App\Models\InboxTemplate;
 use Awcodes\FilamentTableRepeater\Components\TableRepeater;
@@ -20,7 +19,6 @@ use Filament\Resources\Table;
 use Filament\Tables;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
-use SebastianBergmann\Template\Template;
 
 class InboxResource extends Resource
 {
@@ -72,11 +70,11 @@ class InboxResource extends Resource
                     ->schema([
                         TextInput::make('imap_host')
                             ->maxLength(255)
-                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
+                            ->disabled(fn (Closure $get) => $get('template_id') !== '')
                             ->label('Host')
                             ->required(),
                         TextInput::make('imap_port')
-                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
+                            ->disabled(fn (Closure $get) => $get('template_id') !== '')
                             ->maxLength(255)
                             ->label('Port')
                             ->minValue(1)
@@ -94,7 +92,7 @@ class InboxResource extends Resource
                             ->password()
                             ->required(),
                         Select::make('imap_encryption')
-                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
+                            ->disabled(fn (Closure $get) => $get('template_id') !== '')
                             ->label('Encryption')
                             ->required()
                             ->options([
@@ -135,37 +133,37 @@ class InboxResource extends Resource
                             ->disableItemMovement()
                             ->disableItemDeletion()
                             ->disableItemCreation()
-                            ->hiddenOn('create')
+                            ->hiddenOn('create'),
                     ]),
                 Fieldset::make('SMTP settings')
                     ->schema([
                         TextInput::make('smtp_host')
-                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
+                            ->disabled(fn (Closure $get) => $get('template_id') !== '')
                             ->maxLength(255)
                             ->label('Host')
                             ->required(),
                         TextInput::make('smtp_port')
-                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
+                            ->disabled(fn (Closure $get) => $get('template_id') !== '')
                             ->maxLength(255)
                             ->label('Port')
                             ->minValue(1)
                             ->required()
                             ->numeric(),
                         TextInput::make('smtp_username')
-                            ->hidden(fn(Closure $get) => $get('same_credentials') !== false)
+                            ->hidden(fn (Closure $get) => $get('same_credentials') !== false)
                             ->label('Username')
                             ->disableAutocomplete()
                             ->maxLength(255)
                             ->required(),
                         TextInput::make('smtp_password')
-                            ->hidden(fn(Closure $get) => $get('same_credentials') !== false)
+                            ->hidden(fn (Closure $get) => $get('same_credentials') !== false)
                             ->disableAutocomplete()
                             ->label('Password')
                             ->maxLength(255)
                             ->password()
                             ->required(),
                         Select::make('smtp_encryption')
-                            ->disabled(fn(Closure $get) => $get('template_id') !== '')
+                            ->disabled(fn (Closure $get) => $get('template_id') !== '')
                             ->label('Encryption')
                             ->required()
                             ->options([
