@@ -21,3 +21,7 @@ Route::redirect('/login', '/admin/login')->name('login');
 Route::middleware(Authenticate::class)->group(function () {
     Route::get('/emails/{email}/body', [EmailController::class, 'body'])->name('emails.body');
 });
+
+Route::get('/test', function () {
+    \App\Jobs\ResendSnoozedEmailNotifications::dispatchSync();
+});

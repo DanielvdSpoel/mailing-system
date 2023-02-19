@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Jobs\ProcessIncomingEmail;
+use App\Jobs\ResendSnoozedEmailNotifications;
 use App\Models\Inbox;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
@@ -21,6 +22,8 @@ class Kernel extends ConsoleKernel
                 ProcessIncomingEmail::dispatch($inbox)->onQueue('email');
             });
         })->everyFifteenMinutes();
+
+        $schedule->job(new ResendSnoozedEmailNotifications)->everyFiveMinutes();
     }
 
     /**

@@ -21,7 +21,7 @@ class BatchUpdateRequest extends FormRequest
             'is_read' => ['sometimes', 'boolean'],
             'is_archived' => ['sometimes', 'boolean'],
             'is_deleted' => ['sometimes', 'boolean'],
-
+            'snooze_until' => ['sometimes', 'date'],
         ];
     }
 }
