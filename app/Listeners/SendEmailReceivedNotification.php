@@ -5,7 +5,7 @@ namespace App\Listeners;
 use App\Events\EmailReceived;
 use App\Models\User;
 use App\Notifications\EmailReceived as EmailReceivedNotification;
-use Notification;
+use Illuminate\Support\Facades\Notification;
 
 class SendEmailReceivedNotification
 {
