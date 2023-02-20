@@ -27,7 +27,10 @@ class ExcludeSnoozedEmailsScope implements Scope
             return $builder->withoutGlobalScope($this)->whereNull('snoozed_until');
         });
 
-        $builder->macro('onlySnoozed', function (Builder $builder) {
+        $builder->macro('onlySnoozed', function (Builder $builder, $onlySnoozed = true) {
+            if (!$onlySnoozed) {
+                return $builder->withoutSnoozed();
+            }
             return $builder->withoutGlobalScope($this)->whereNotNull('snoozed_until');
         });
     }

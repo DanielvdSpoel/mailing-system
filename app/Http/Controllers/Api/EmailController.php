@@ -22,6 +22,14 @@ class EmailController extends Controller
             ->withArchived($request->get('include_archived', false) == 'true')
             ->withSpam($request->get('include_spam', false) == 'true')
             ->withEmailsSendByUs($request->get('include_emails_send_by_us', false))
+            ->onlyDraft($request->get('only_drafts', false) == 'true')
+            ->onlySnoozed($request->get('only_snoozed', false) == 'true')
+            ->onlyArchived($request->get('only_archived', false) == 'true')
+            ->onlySpam($request->get('only_spam', false) == 'true')
+            ->onlyEmailsSendByUs($request->get('only_emails_send_by_us', false))
+            ->when($request->get('only_deleted', false) == 'true', function ($query) {
+                return $query->onlyTrashed();
+            })
             ->orderBy('received_at', 'desc')
             ->when($request->get('limit'), function ($query, $limit) {
                 return $query->limit($limit);

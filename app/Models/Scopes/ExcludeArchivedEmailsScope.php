@@ -27,7 +27,10 @@ class ExcludeArchivedEmailsScope implements Scope
             return $builder->withoutGlobalScope($this)->whereNull('archived_at');
         });
 
-        $builder->macro('onlyArchived', function (Builder $builder) {
+        $builder->macro('onlyArchived', function (Builder $builder, $onlyArchived = true) {
+            if (!$onlyArchived) {
+                return $builder->withoutArchived();
+            }
             return $builder->withoutGlobalScope($this)->whereNotNull('archived_at');
         });
     }
