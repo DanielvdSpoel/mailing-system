@@ -23,7 +23,7 @@ class EmailAddressResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('label')
+                Forms\Components\TextInput::make('name')
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('mailbox')
@@ -43,7 +43,7 @@ class EmailAddressResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('label')
+                Tables\Columns\TextColumn::make('name')
                     ->sortable()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')

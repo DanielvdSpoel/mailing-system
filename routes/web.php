@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\EmailController;
+use App\Models\Email;
 use Filament\Http\Middleware\Authenticate;
 use Illuminate\Support\Facades\Route;
 
@@ -16,7 +17,12 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::redirect('/', '/admin');
-
+Route::redirect('/login', '/admin/login')->name('login');
 Route::middleware(Authenticate::class)->group(function () {
     Route::get('/emails/{email}/body', [EmailController::class, 'body'])->name('emails.body');
+});
+
+Route::get('/test', function () {
+    dd(Email::onlyArchived()->get());
+//    \App\Jobs\ResendSnoozedEmailNotifications::dispatchSync();
 });

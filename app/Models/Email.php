@@ -2,6 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\ExcludeArchivedEmailsScope;
+use App\Models\Scopes\ExcludeDraftEmailsScope;
+use App\Models\Scopes\ExcludeEmailsSendByUsScope;
+use App\Models\Scopes\ExcludeMarkedAsSpamEmailsScope;
+use App\Models\Scopes\ExcludeSnoozedEmailsScope;
 use App\Supports\EmailSupport;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,8 +32,11 @@ class Email extends Model
         'received_at',
         'archived_at',
         'deleted_at',
+        'marked_as_spam_at',
         'read_at',
+        'is_important',
         'is_draft',
+        'snoozed_until',
         'email_send_by_us',
         'inbox_id',
         'conversation_id',
@@ -140,6 +148,9 @@ class Email extends Model
         if ($overview->draft || $flags['draft']) {
             $email->is_draft = true;
         }
+        if ($flags['spam']) {
+            $email->marked_as_spam_at = Carbon::now()->setTimezone(config('app.timezone'))->toDateTimeString();
+        }
 
         //$inbox->senderAddresses()->pluck('email')->contains($email->senderAddress->email ||
         //check if email was send by us
@@ -174,5 +185,15 @@ class Email extends Model
 
             return $email;
         }
+    }
+
+    protected static function booted(): void
+    {
+        static::addGlobalScope(new ExcludeDraftEmailsScope());
+        static::addGlobalScope(new ExcludeArchivedEmailsScope());
+        static::addGlobalScope(new ExcludeEmailsSendByUsScope());
+        static::addGlobalScope(new ExcludeSnoozedEmailsScope());
+        static ::addGlobalScope(new ExcludeMarkedAsSpamEmailsScope());
+
     }
 }

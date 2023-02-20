@@ -10,7 +10,7 @@ class EmailAddressFactory extends Factory
     public function definition(): array
     {
         return [
-            'label' => fake()->word(),
+            'name' => fake()->word(),
             'mailbox' => fake()->word(),
             'domain' => fake()->word(),
             'email' => fake()->unique()->safeEmail(),

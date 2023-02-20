@@ -25,7 +25,7 @@ it('can create a email address', function () {
 
     livewire(CreateEmailAddress::class)
         ->fillForm([
-            'label' => $newData->label,
+            'name' => $newData->name,
             'mailbox' => $newData->mailbox,
             'domain' => $newData->domain,
             'email' => $newData->email,
@@ -35,7 +35,7 @@ it('can create a email address', function () {
         ->assertHasNoFormErrors();
 
     $this->assertDatabaseHas(EmailAddress::class, [
-        'label' => $newData->label,
+        'name' => $newData->name,
         'mailbox' => $newData->mailbox,
         'domain' => $newData->domain,
         'email' => $newData->email,
@@ -47,13 +47,13 @@ it('can validate input', function () {
 
     livewire(CreateEmailAddress::class)
         ->fillForm([
-            'label' => null,
+            'name' => null,
             'mailbox' => $newData->mailbox,
             'domain' => $newData->domain,
             'email' => fake()->word(),
         ])
         ->call('create')
-        ->assertHasFormErrors(['label' => 'required', 'email' => 'email']);
+        ->assertHasFormErrors(['name' => 'required', 'email' => 'email']);
 });
 
 it('can see the edit button', function () {
@@ -67,7 +67,7 @@ it('can retrieve data', function () {
         'record' => $emailAddress->getKey(),
     ])
         ->assertFormSet([
-            'label' => $emailAddress->label,
+            'name' => $emailAddress->name,
             'email' => $emailAddress->email,
         ]);
 });

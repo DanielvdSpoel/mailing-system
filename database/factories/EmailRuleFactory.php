@@ -13,7 +13,7 @@ class EmailRuleFactory extends Factory
         $action = fake()->randomElement(array_keys(EmailRuleHandler::$availableActions));
 
         return [
-            'label' => fake()->word(),
+            'name' => fake()->word(),
             'conditions' => [
                 [
                     'field' => $field,

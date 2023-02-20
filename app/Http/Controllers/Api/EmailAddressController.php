@@ -15,14 +15,14 @@ class EmailAddressController extends Controller
 
         if ($request->get('search')) {
             $emailAddresses->where('email', 'like', '%'.$request->get('search').'%')
-                ->orWhere('label', 'like', '%'.$request->get('search').'%');
+                ->orWhere('name', 'like', '%'.$request->get('search').'%');
         }
 
         if ($request->get('limit')) {
             $emailAddresses->limit($request->get('limit'));
         }
 
-        $emailAddresses->orderBy('label');
+        $emailAddresses->orderBy('name');
 
         return EmailAddressResource::collection($emailAddresses->get());
     }

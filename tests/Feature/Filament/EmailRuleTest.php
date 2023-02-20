@@ -24,7 +24,7 @@ it('can create a email rule', function () {
 
     livewire(CreateEmailRule::class)
         ->fillForm([
-            'label' => $newData->label,
+            'name' => $newData->name,
             'conditions' => $newData->conditions,
             'actions' => $newData->actions,
         ])
@@ -32,7 +32,7 @@ it('can create a email rule', function () {
         ->assertHasNoFormErrors();
 
     $this->assertDatabaseHas(EmailRule::class, [
-        'label' => $newData->label,
+        'name' => $newData->name,
         'conditions' => json_encode($newData->conditions),
         'actions' => json_encode($newData->actions),
     ]);
@@ -49,7 +49,7 @@ it('can retrieve data', function () {
         'record' => $emailRule->getKey(),
     ])
         ->assertFormSet([
-            'label' => $emailRule->label,
+            'name' => $emailRule->name,
         ]);
 });
 

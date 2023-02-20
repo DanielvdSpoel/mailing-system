@@ -29,7 +29,7 @@ class EmailRuleResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('label')
+                TextInput::make('name')
                     ->required()
                     ->maxLength(255),
                 Repeater::make('conditions')
@@ -90,7 +90,7 @@ class EmailRuleResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('label')->searchable()->sortable(),
+                Tables\Columns\TextColumn::make('name')->searchable()->sortable(),
                 Tables\Columns\TextColumn::make('conditions_count')
                     ->sortable()
                     ->getStateUsing(function (Model $record) {

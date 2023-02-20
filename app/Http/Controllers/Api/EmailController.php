@@ -15,7 +15,17 @@ class EmailController extends Controller
     public function index(Request $request)
     {
         $email = Email::query()
-            ->with(['inbox', 'labels', 'senderAddress', 'conversation', 'inbox.senderAddresses']);
+            ->with(['inbox', 'labels', 'senderAddress', 'conversation', 'inbox.senderAddresses'])
+            ->withTrashed($request->get('include_deleted', false) == 'true')
+            ->withDraft($request->get('include_drafts', false) == 'true')
+            ->withSnoozed($request->get('include_snoozed', false) == 'true')
+            ->withArchived($request->get('include_archived', false) == 'true')
+            ->withSpam($request->get('include_spam', false) == 'true')
+            ->withEmailsSendByUs($request->get('include_emails_send_by_us', false))
+            ->orderBy('received_at', 'desc')
+            ->when($request->get('limit'), function ($query, $limit) {
+                return $query->limit($limit);
+            });
 
         if ($request->inbox_id) {
             $email->where('inbox_id', $request->inbox_id);
@@ -42,34 +52,10 @@ class EmailController extends Controller
             });
         }
 
-        if (! $request->get('included_archived', false)) {
-            $email->whereNull('archived_at');
-        }
-
-        if (! $request->get('included_deleted', false)) {
-            $email->whereNull('deleted_at');
-        }
-
-        if (! $request->get('included_drafts', false)) {
-            $email->where('is_draft', false);
-        }
-
-        if (! $request->get('included_emails_send_by_us', false)) {
-            $email->where('email_send_by_us', false);
-        }
-
-        $email->orderBy('received_at', 'desc');
-
-        $per_page = $request->get('per_page', 25);
-
-        if ($request->get('limit')) {
-            $email->limit($request->get('limit'));
-        }
-
         if ($request->get('no_pagination')) {
             $email = $email->get();
         } else {
-            $email = $email->paginate($per_page);
+            $email = $email->paginate($request->get('per_page', 25));
         }
 
         return EmailResource::collection($email);
@@ -103,7 +89,7 @@ class EmailController extends Controller
 
     private function updateEmail(Email $email, $data): void
     {
-        foreach (['is_archived', 'is_deleted', 'is_read'] as $key) {
+        foreach (['is_archived', 'is_deleted', 'is_read', 'is_marked_as_spam'] as $key) {
             if (! isset($data[$key])) {
                 continue;
             }
@@ -116,6 +102,6 @@ class EmailController extends Controller
             unset($data['labels']);
         }
 
-        $email->update($data);
+        $email->withoutGlobalScopes()->update($data);
     }
 }
