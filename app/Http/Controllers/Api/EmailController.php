@@ -15,7 +15,16 @@ class EmailController extends Controller
     public function index(Request $request)
     {
         $email = Email::query()
-            ->with(['inbox', 'labels', 'senderAddress', 'conversation', 'inbox.senderAddresses']);
+            ->with(['inbox', 'labels', 'senderAddress', 'conversation', 'inbox.senderAddresses'])
+            ->withTrashed($request->get('include_deleted', false) == 'true')
+            ->withDraft($request->get('include_drafts', false) == 'true')
+            ->withSnoozed($request->get('include_snoozed', false) == 'true')
+            ->withArchived($request->get('include_archived', false) == 'true')
+            ->withEmailsSendByUs($request->get('include_emails_send_by_us', false))
+            ->orderBy('received_at', 'desc')
+            ->when($request->get('limit'), function ($query, $limit) {
+                return $query->limit($limit);
+            });
 
         if ($request->inbox_id) {
             $email->where('inbox_id', $request->inbox_id);
@@ -42,38 +51,10 @@ class EmailController extends Controller
             });
         }
 
-        if ($request->get('included_archived', false)) {
-            $email->includeArchived();
-        }
-
-        if ($request->get('included_deleted', false)) {
-            $email->withTrashed();
-        }
-
-        if ($request->get('included_drafts', false)) {
-            $email->includeDrafts();
-        }
-
-        if ($request->get('included_snoozed', false)) {
-            $email->includeSnoozed();
-        }
-
-        if ($request->get('included_emails_send_by_us', false)) {
-            $email->includeEmailsSendByUs();
-        }
-
-        $email->orderBy('received_at', 'desc');
-
-        $per_page = $request->get('per_page', 25);
-
-        if ($request->get('limit')) {
-            $email->limit($request->get('limit'));
-        }
-
         if ($request->get('no_pagination')) {
             $email = $email->get();
         } else {
-            $email = $email->paginate($per_page);
+            $email = $email->paginate($request->get('per_page', 25));
         }
 
         return EmailResource::collection($email);

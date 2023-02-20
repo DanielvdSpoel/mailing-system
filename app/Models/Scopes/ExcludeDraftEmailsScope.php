@@ -16,8 +16,19 @@ class ExcludeDraftEmailsScope implements Scope
 
     public function extend(Builder $builder)
     {
-        $builder->macro('withDraft', function (Builder $builder) {
+        $builder->macro('withDraft', function (Builder $builder, $withDraft = true) {
+            if (!$withDraft) {
+                return $builder->withoutDraft();
+            }
             return $builder->withoutGlobalScope($this);
+        });
+
+        $builder->macro('withoutDraft', function (Builder $builder) {
+            return $builder->withoutGlobalScope($this)->where('is_draft', false);
+        });
+
+        $builder->macro('onlyDraft', function (Builder $builder) {
+            return $builder->withoutGlobalScope($this)->where('is_draft', true);
         });
     }
 }

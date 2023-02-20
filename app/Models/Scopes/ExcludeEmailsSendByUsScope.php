@@ -16,8 +16,19 @@ class ExcludeEmailsSendByUsScope implements Scope
 
     public function extend(Builder $builder)
     {
-        $builder->macro('withEmailSendByUs', function (Builder $builder) {
+        $builder->macro('withEmailsSendByUs', function (Builder $builder, $withEmailsSendByUs = true) {
+            if (!$withEmailsSendByUs) {
+                return $builder->withoutEmailsSendByUs();
+            }
             return $builder->withoutGlobalScope($this);
+        });
+
+        $builder->macro('withoutEmailsSendByUs', function (Builder $builder) {
+            return $builder->withoutGlobalScope($this)->where('email_send_by_us', false);
+        });
+
+        $builder->macro('onlyEmailsSendByUs', function (Builder $builder) {
+            return $builder->withoutGlobalScope($this)->whereNotNull('email_send_by_us', true);
         });
     }
 }

@@ -16,8 +16,19 @@ class ExcludeSnoozedEmailsScope implements Scope
 
     public function extend(Builder $builder)
     {
-        $builder->macro('withSnoozed', function (Builder $builder) {
+        $builder->macro('withSnoozed', function (Builder $builder, $withSnoozed = true) {
+            if (!$withSnoozed) {
+                return $builder->withoutSnoozed();
+            }
             return $builder->withoutGlobalScope($this);
+        });
+
+        $builder->macro('withoutSnoozed', function (Builder $builder) {
+            return $builder->withoutGlobalScope($this)->whereNull('snoozed_until')->orWhere('snoozed_until', '<', DB::raw('NOW()'));
+        });
+
+        $builder->macro('onlySnoozed', function (Builder $builder) {
+            return $builder->withoutGlobalScope($this)->whereNotNull('snoozed_until')->orWhere('snoozed_until', '>', DB::raw('NOW()'));
         });
     }
 }

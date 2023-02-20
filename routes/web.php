@@ -23,5 +23,6 @@ Route::middleware(Authenticate::class)->group(function () {
 });
 
 Route::get('/test', function () {
-    \App\Jobs\ResendSnoozedEmailNotifications::dispatchSync();
+    dd(Email::onlyArchived()->get());
+//    \App\Jobs\ResendSnoozedEmailNotifications::dispatchSync();
 });
