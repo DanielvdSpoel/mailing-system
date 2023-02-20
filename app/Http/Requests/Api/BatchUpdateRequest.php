@@ -20,6 +20,8 @@ class BatchUpdateRequest extends FormRequest
             'labels.*' => ['required', 'integer', 'exists:labels,id'],
             'is_read' => ['sometimes', 'boolean'],
             'is_archived' => ['sometimes', 'boolean'],
+            'is_marked_as_spam' => ['sometimes', 'boolean'],
+            'is_important' => ['sometimes', 'boolean'],
             'is_deleted' => ['sometimes', 'boolean'],
             'snooze_until' => ['sometimes', 'date'],
         ];

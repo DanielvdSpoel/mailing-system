@@ -20,11 +20,12 @@ class EmailFactory extends Factory
             'message_id' => fake()->word(),
             'received_at' => Carbon::now(),
             'archived_at' => null,
+            'marked_as_spam_at' => null,
             'read_at' => fake()->boolean() ? Carbon::now() : null,
             'is_draft' => false,
+            'is_important' => fake()->boolean(),
             'needs_human_verification' => fake()->boolean(),
             'auto_filtered_at' => Carbon::now(),
-
             'reply_to_address_id' => EmailAddress::factory(),
             'sender_address_id' => EmailAddress::factory(),
             'conversation_id' => Conversation::factory(),

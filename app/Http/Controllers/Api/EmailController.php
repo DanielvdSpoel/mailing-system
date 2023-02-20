@@ -20,12 +20,12 @@ class EmailController extends Controller
             ->withDraft($request->get('include_drafts', false) == 'true')
             ->withSnoozed($request->get('include_snoozed', false) == 'true')
             ->withArchived($request->get('include_archived', false) == 'true')
+            ->withSpam($request->get('include_spam', false) == 'true')
             ->withEmailsSendByUs($request->get('include_emails_send_by_us', false))
             ->orderBy('received_at', 'desc')
             ->when($request->get('limit'), function ($query, $limit) {
                 return $query->limit($limit);
             });
-//        dd($email->toSql());
 
         if ($request->inbox_id) {
             $email->where('inbox_id', $request->inbox_id);
@@ -89,7 +89,7 @@ class EmailController extends Controller
 
     private function updateEmail(Email $email, $data): void
     {
-        foreach (['is_archived', 'is_deleted', 'is_read'] as $key) {
+        foreach (['is_archived', 'is_deleted', 'is_read', 'is_marked_as_spam'] as $key) {
             if (! isset($data[$key])) {
                 continue;
             }

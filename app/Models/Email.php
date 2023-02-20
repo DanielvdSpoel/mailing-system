@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Scopes\ExcludeArchivedEmailsScope;
 use App\Models\Scopes\ExcludeDraftEmailsScope;
 use App\Models\Scopes\ExcludeEmailsSendByUsScope;
+use App\Models\Scopes\ExcludeMarkedAsSpamEmailsScope;
 use App\Models\Scopes\ExcludeSnoozedEmailsScope;
 use App\Supports\EmailSupport;
 use Carbon\Carbon;
@@ -31,7 +32,9 @@ class Email extends Model
         'received_at',
         'archived_at',
         'deleted_at',
+        'marked_as_spam_at',
         'read_at',
+        'is_important',
         'is_draft',
         'snoozed_until',
         'email_send_by_us',
@@ -187,6 +190,7 @@ class Email extends Model
         static::addGlobalScope(new ExcludeArchivedEmailsScope());
         static::addGlobalScope(new ExcludeEmailsSendByUsScope());
         static::addGlobalScope(new ExcludeSnoozedEmailsScope());
+        static ::addGlobalScope(new ExcludeMarkedAsSpamEmailsScope());
 
     }
 }

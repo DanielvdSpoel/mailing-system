@@ -9,7 +9,7 @@ class EmailResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
      */
     public function toArray($request)
@@ -24,10 +24,12 @@ class EmailResource extends JsonResource
             'labels' => LabelResource::collection($this->labels),
             'received_at' => $this->received_at,
             'conversation' => $this->conversation,
-            'is_read' => (bool) $this->read_at,
-            'is_draft' => (bool) $this->is_draft,
-            'is_archived' => (bool) $this->archived_at,
-            'is_deleted' => (bool) $this->deleted_at,
+            'is_read' => (bool)$this->read_at,
+            'is_draft' => (bool)$this->is_draft,
+            'is_archived' => (bool)$this->archived_at,
+            'is_deleted' => (bool)$this->deleted_at,
+            'is_marked_as_spam' => (bool)$this->marked_as_spam_at,
+            'is_important' => $this->is_important,
 
         ];
     }
