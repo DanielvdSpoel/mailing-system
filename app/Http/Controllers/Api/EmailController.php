@@ -25,6 +25,7 @@ class EmailController extends Controller
             ->when($request->get('limit'), function ($query, $limit) {
                 return $query->limit($limit);
             });
+//        dd($email->toSql());
 
         if ($request->inbox_id) {
             $email->where('inbox_id', $request->inbox_id);

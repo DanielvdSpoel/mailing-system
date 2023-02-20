@@ -11,7 +11,7 @@ class ExcludeSnoozedEmailsScope implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        $builder->whereNull('snoozed_until')->orWhere('snoozed_until', '<', DB::raw('NOW()'));
+        $builder->whereNull('snoozed_until');
     }
 
     public function extend(Builder $builder)
@@ -24,11 +24,11 @@ class ExcludeSnoozedEmailsScope implements Scope
         });
 
         $builder->macro('withoutSnoozed', function (Builder $builder) {
-            return $builder->withoutGlobalScope($this)->whereNull('snoozed_until')->orWhere('snoozed_until', '<', DB::raw('NOW()'));
+            return $builder->withoutGlobalScope($this)->whereNull('snoozed_until');
         });
 
         $builder->macro('onlySnoozed', function (Builder $builder) {
-            return $builder->withoutGlobalScope($this)->whereNotNull('snoozed_until')->orWhere('snoozed_until', '>', DB::raw('NOW()'));
+            return $builder->withoutGlobalScope($this)->whereNotNull('snoozed_until');
         });
     }
 }
