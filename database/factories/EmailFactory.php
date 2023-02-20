@@ -37,10 +37,20 @@ class EmailFactory extends Factory
     {
         return $this->state(function (array $attributes) {
             return [
+                'marked_as_spam_at' => Carbon::now(),
+            ];
+        });
+    }
+
+    public function spam(): Factory
+    {
+        return $this->state(function (array $attributes) {
+            return [
                 'archived_at' => Carbon::now(),
             ];
         });
     }
+
 
     public function draft(): Factory
     {
