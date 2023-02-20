@@ -148,6 +148,9 @@ class Email extends Model
         if ($overview->draft || $flags['draft']) {
             $email->is_draft = true;
         }
+        if ($flags['spam']) {
+            $email->marked_as_spam_at = Carbon::now()->setTimezone(config('app.timezone'))->toDateTimeString();
+        }
 
         //$inbox->senderAddresses()->pluck('email')->contains($email->senderAddress->email ||
         //check if email was send by us
